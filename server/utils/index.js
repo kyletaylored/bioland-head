@@ -18,8 +18,8 @@ export const getKey =  (event) => {
     const { context } = parseCookies(event)
     const query       = getQuery(event)
     const { pathname } = new URL(getRequestURL(event))
-    const locale = query.locale || context.locale || 'und'
-    const host   = query.host || context.host 
+    const locale = query?.locale || context?.locale || 'und'
+    const host   = query?.host || context?.host 
     const makeHash = (x) => crypto.createHash('sha1').update(x).digest('hex')
     const hashData = `${host}-${locale}-${pathname}` + JSON.stringify({...context, ...query});
 
@@ -112,6 +112,14 @@ function getPathPrefix(locale, defaultLocale){
     return locale === 'und' || locale === defaultLocale  ? '' : '/'+ drupalizeLocale(locale);
 }
 
+export function removeLocalizationFromPath(ctx, path){
+
+    const pathParts = path.split('/');
+
+    const isLocalizedPath = pathParts[1] === ctx.locale;
+
+    return isLocalizedPath?   [ '', ...pathParts.slice(2) ].join('/')    :  pathParts.join('/');
+}
 function drupalizeLocale(locale){
     if(locale === 'zh') return 'zh-hans';
 
@@ -134,9 +142,10 @@ export async function getSiteDefinedName (ctx) {
 
 export async function getSiteConfig({ identifier }){
 
-    const { gaiaApi, drupalMultisiteIdentifier }  = useRuntimeConfig().public;
+    const { gaiaApi, multiSiteCode, env }  = useRuntimeConfig().public;
 
-    const uri = `${gaiaApi}/v2023/drupal/multisite/${drupalMultisiteIdentifier}/configs/${identifier}`
+    
+    const uri = `https://dmsm.cbddev.xyz/api/config/${env}/${multiSiteCode}/${identifier}`//`${gaiaApi}/v2023/drupal/multisite/${multiSiteCode}/configs/${identifier}`
 
     return $fetch(uri)
 }

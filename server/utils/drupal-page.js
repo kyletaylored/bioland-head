@@ -1,6 +1,6 @@
 import   camelCaseKeys   from 'camelcase-keys';
 
-const localizationExceptionPaths = ['/forums/', '/topics/'];
+const localizationExceptionPaths = ['/forums/', '/forums', '/topics/'];
 
 export async function getPageData(ctx){
     try{
@@ -69,12 +69,13 @@ export async function getPageThumb(ctx){
 
 async function getPageIdentifiers(ctx){
 
-    const { localizedHost, path } = ctx;
+    const { host,localizedHost, path, isLocalizationException  } = ctx;
 
-    const cleanPath = cleanToPath(ctx, path);
-    //encodeURIComponent(cleanToPath(ctx,path))
+    const cleanPath = removeLocalizationFromPath(ctx, path);
+    
+    const uriHost = isLocalizationException? host : localizedHost;
 
-    const uri = `${localizedHost}/router/translate-path?path=${encodeURIComponent(cleanPath)}`;
+    const uri = `${uriHost}/router/translate-path?path=${encodeURIComponent(cleanPath||'/')}`;
 
 
     const data = await $fetch(uri, { mode: 'cors' })
@@ -100,12 +101,7 @@ async function getThumbFiles(data,  {localizedHost, host }){
 
             if(thumb) return host+thumb
         }
-
-
-
     }
-
-
     return '/images/no-image.png';
 }
 
@@ -154,12 +150,11 @@ function mapTagsByType(tags){
 
 function getSearchParams(ctx, type, bundle, prop){
     const search = {jsonapi_include: 1};
-//field_attachments.fieldMediaDocument
+
     if(type === 'node' && bundle === 'content' && !prop)  setContentSearchParams(search);
     if(type === 'media' &&  ['image', 'document'].includes(bundle))  setMediaImageSearchParams(search);
     if(prop === 'field_attachments') search['include'] = 'thumbnail';
-   // if(ctx.path.startsWith('/document/')) search['include'] =search['include']+',field_attachments.field_media_document'
-// console.log(ctx.path)
+
     return search;
 }
 
@@ -171,16 +166,11 @@ function setMediaImageSearchParams(search){
 }
 
 
-function cleanToPath(ctx, path){
+// function cleanToPath(ctx, path){
 
-    const pathParts = path.split('/');
+//     const pathParts = path.split('/');
 
-    const isLocalizedPath = pathParts[1] === ctx.locale;
-    // if(pathParts[1] === 'zh') pathParts[1] = 'zh-hans';
+//     const isLocalizedPath = pathParts[1] === ctx.locale;
 
-    // if(pathParts[1] === 'search') return '/search';
-    
-    // if(pathParts[2] === 'search') return `/${pathParts[1]}/${pathParts[2]}`;
-
-    return isLocalizedPath?   [ '', ...pathParts.slice(2) ].join('/')    :  pathParts.join('/');
-}
+//     return isLocalizedPath?   [ '', ...pathParts.slice(2) ].join('/')    :  pathParts.join('/');
+// }

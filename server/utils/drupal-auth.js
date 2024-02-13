@@ -8,9 +8,9 @@ export const useDrupalLogin = async (identifier) => {
   try{
 
     const { apiUser:name, apiUserPass:pass }   = useRuntimeConfig()
-    const { baseHost, drupalMultisiteIdentifier }   = useRuntimeConfig().public;
+    const { baseHost, multiSiteCode }   = useRuntimeConfig().public;
 
-    const cacheId = `${drupalMultisiteIdentifier}-${identifier}`;
+    const cacheId = `${multiSiteCode}-${identifier}`;
 
     if($http[cacheId]) return $http[cacheId]
 

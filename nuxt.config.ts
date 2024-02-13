@@ -34,7 +34,7 @@ export default defineNuxtConfig({
       baseURL: '',
       env: 'production',
       baseHost:'.chm-cbd.net',
-      drupalMultisiteIdentifier: 'bl2',
+      multiSiteCode: 'bl2',
       gaiaApi: 'https://api.cbd.int/api',
     }
   },

@@ -48,6 +48,11 @@ function openMenu({ href, index }){
 function parentPath(){
     return route.path.split('/').slice(0, -1).join('/');
 }
+
+function makeCrumb(){
+
+}
+
 </script>
 <style lang="scss" scoped>
 

@@ -5,7 +5,7 @@
                 <PageListTextSearch class="mb-1"/>
             </div>
             <div class="col-12 col-md-9 px-0">
-                <PageBreadCrumbs :count="results?.comments?.count"/>
+                <PageBreadCrumbs :count="results?.comments?.length"/>
             </div>
         </div>
         <div class="row ">
@@ -43,13 +43,13 @@
     </div>
 
 </template>
-<i18n src="@/i18n/dist/components/page/list/index.json"></i18n>
+
 <script setup>
     import { useSiteStore  } from '~/stores/site';
-    import { useMenusStore } from '~/stores/menus';
     import { usePageStore  } from '~/stores/page';
 
-    const { t  }                        = useI18n();
+    
+
     const   r                           = useRoute();
     const   siteStore                   = useSiteStore();
     const   pageStore                   = usePageStore ();
@@ -73,9 +73,11 @@
 
     const { data: results, status, refresh } = await useFetch(()=>getApiUri(), {  method: 'GET', query, onResponse });
 
-    function onResponse({ request, response, options}){
+    function onResponse({ response }){
+        if(pageStore.id !== response._data.id) return;
 
-        // response._data =response._data[0] || {}
+        pageStore.set('taxonomyForums', response._data.forum)
+
     }
 
     onMounted(() => { eventBus.on('changePage', refresh); });

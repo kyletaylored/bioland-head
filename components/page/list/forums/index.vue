@@ -5,7 +5,7 @@
                 &nbsp;
             </div>
             <div class="col-12 col-md-9 px-0">
-                <PageBreadCrumbs :count="results?.count"/>
+                <PageBreadCrumbs :count="results?.length"/>
             </div>
             <div class="col-12 col-md-3 ps-0" >
                 <h2 class="page-type text-capitalize">{{t('Forums',2)}}</h2>

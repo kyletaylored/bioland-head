@@ -5,7 +5,7 @@
                 <PageListTextSearch class="mb-1"/>
             </div>
             <div class="col-12 col-md-9 px-0">
-                <PageBreadCrumbs :count="results?.topics?.count"/>
+                <PageBreadCrumbs :count="results?.topics?.length"/>
             </div>
             <div class="col-12 col-md-3 ps-0" >
                 <!-- <h2 class="page-type text-capitalize">{{t('Topic',2)}}</h2> -->

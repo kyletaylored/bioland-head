@@ -47,7 +47,7 @@ function getById ({ identifier, localizedHost, locale } ){
                                 return data.length? all? data : data[0] : undefined
                             }
                             catch(e){
-                              //  consola.error('usePathAlias.getById', e)
+                                //consola.error('usePathAlias.getById', e.response)
                             }
                     }
 }
@@ -59,7 +59,7 @@ function getSearchParams(type, nodeId, locale = 'en'){
     search['filter[status][condition][operator]'] = '=';
     search['filter[status][condition][value]']    = 1;
 
-    search['filter[node-id][condition][path.alias]']     = 'path';
+    search['filter[node-id][condition][path]']     = 'path';
     search['filter[node-id][condition][operator]'] = '=';
     search['filter[node-id][condition][value]']    = `/${type}/${nodeId}`;
     
@@ -84,6 +84,7 @@ export async function mapAliasByLocale(ctx, type, id){
     const languages = await getById(ctx)(type, id, true)
     const locales = (await getInstalledLanguages(ctx)).map(mapDrupalLocaleToLocale);
 
+
     const map = {};
     const englishLang = languages?.find(({langcode})=> langcode === 'en') || { path: `/${type}/${id}`};
     
@@ -91,13 +92,15 @@ export async function mapAliasByLocale(ctx, type, id){
         const aLang           = languages?.find(({langcode}) => langcode.startsWith(locale));
         const { alias, path } = aLang || englishLang;
 
+
         if(ctx.defaultLocale === locale){
             map[locale] = aLang? `${alias}` : `${path}`;
             continue;
         }
-        if(ctx.isLocalizationException)
-            map[locale] = `/${locale}${ctx.path}`
-        else
+
+        if(ctx.isLocalizationException){
+            map[locale] = `/${locale}${removeLocalizationFromPath(ctx,ctx.path)}`
+        }else
             map[locale] = aLang? `/${locale}${alias}` : `/${locale}${path}`;
     }
 
