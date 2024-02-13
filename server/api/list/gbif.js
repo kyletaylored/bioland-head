@@ -11,7 +11,7 @@ export default cachedEventHandler(async (event) => {
         const panoLocale     = panoLocales.includes(locale)? locale.toLowerCase() : 'en';
 
 
-        const countryQueryString = Array.isArray(countries) && countries.length? countries.map((s)=>`country=${s.toUpperCase()}`).join('&') : '';
+        const countryQueryString = Array.isArray(countries) && countries.length? countries.filter(x=>x).map((s)=>`country=${s.toUpperCase()}`).join('&') : '';
         const uri = `https://api.gbif.org/v1/occurrence/search?${countryQueryString}&limit=0&facet=publishingOrg&facetLimit=1000`
         const uri2 = `https://api.gbif.org/v1/dataset?${countryQueryString}`;
 

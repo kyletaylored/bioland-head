@@ -23,15 +23,15 @@
     </div>
     <div class="d-flex justify-content-between text-primary mt-2 mb-3">
         <div>
-            <h5 class="fs-4 mb-1 ">{{data.occurrences}}</h5>
+            <h5 class="fs-4 mb-1 ">{{data?.occurrences}}</h5>
             <NuxtLink class="text-decoration-underline" :to="occurrencesLink" external target="_blank">{{t('Occurrence')}}</NuxtLink>
         </div>
         <div>
-            <h5 class="fs-4 mb-1 ">{{data.datasets}}</h5>
+            <h5 class="fs-4 mb-1 ">{{data?.datasets}}</h5>
             <NuxtLink class="text-decoration-underline" :to="datasetsLink" external target="_blank">{{t('Datasets')}}</NuxtLink>
         </div>
         <div>
-            <h5 class="fs-4 mb-1 ">{{data.publishers}}</h5>
+            <h5 class="fs-4 mb-1 ">{{data?.publishers}}</h5>
             <NuxtLink class="text-decoration-underline" :to="publishersLink" external target="_blank">{{t('Publishers')}}</NuxtLink>
         </div>
     </div>
@@ -62,26 +62,26 @@
     const { countries } = siteStore.params;
     const country = countries[[Math.floor(Math.random() * countries.length)]]
 
-    return cCenter.find(({ identifier })=> identifier === country.toUpperCase())
+    return cCenter.find(({ identifier })=> identifier === country?.toUpperCase())
   }
 
     const occurrencesLink = computed(()=> {
         const { countries } = siteStore.params;
-        const countryString = countries.map((s)=>s.toUpperCase()).join('&country=')
+        const countryString = countries.filter(x=>x).map((s)=>s.toUpperCase()).join('&country=')
 
         return  `https://www.gbif.org/occurrence/search?country=${countryString}`
     });
 
     const datasetsLink = computed(()=> {
         const { countries } = siteStore.params;
-        const countryString = countries.map((s)=>s.toUpperCase()).join('&publishing_country=')
+        const countryString = countries.filter(x=>x).map((s)=>s.toUpperCase()).join('&publishing_country=')
 
         return  `https://www.gbif.org/dataset/search?publishing_country=${countryString}`
     });
 
     const publishersLink = computed(()=> {
         const { countries } = siteStore.params;
-        const countryString = countries.map((s)=>s.toUpperCase()).join('&country=')
+        const countryString = countries.filter(x=>x).map((s)=>s.toUpperCase()).join('&country=')
 
         return  `https://www.gbif.org/dataset/search?country=${countryString}`
     });

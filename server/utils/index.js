@@ -144,10 +144,9 @@ export async function getSiteConfig({ identifier }){
 
     const { gaiaApi, multiSiteCode, env }  = useRuntimeConfig().public;
 
-    
     const uri = `https://dmsm.cbddev.xyz/api/config/${env}/${multiSiteCode}/${identifier}`//`${gaiaApi}/v2023/drupal/multisite/${multiSiteCode}/configs/${identifier}`
 
-    return $fetch(uri)
+    return $fetch(uri);
 }
 
 

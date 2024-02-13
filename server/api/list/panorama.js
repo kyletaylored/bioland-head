@@ -11,7 +11,7 @@ export default cachedEventHandler(async (event) => {
         const panoLocale     = panoLocales.includes(locale)? locale.toLowerCase() : 'en';
 
 
-        const countryQueryString = Array.isArray(countries) && countries.length? countries.map((s)=>`country_iso_2[]=${s.toUpperCase()}`).join('&') : '';
+        const countryQueryString = Array.isArray(countries) && countries.length? countries.filter(x=>x).map((s)=>`country_iso_2[]=${s.toUpperCase()}`).join('&') : '';
         const uri = `https://panorama.solutions/${panoLocale}/api/v1/solutions?api_key=${panoramaKey}${countryQueryString? `&${countryQueryString}` : ''}`
         // `https://api.cbd.int/api/v2013/index/select?${queryFields}&q=NOT+version_s:*+AND+realm_ss:chm+AND+schema_s:*++AND+(schema_s:bbiRequest)&rows=25&sort=createdDate_dt+desc&start=0&wt=json`
 
