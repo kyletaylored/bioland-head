@@ -9,20 +9,22 @@ export const useSiteStore = defineStore('site', { state, actions, getters,  pers
 const initState = { 
                     locale                    : undefined,
                     identifier                : undefined,
+                    siteCode                  : undefined,
                     pageIdentifiers           : undefined,
                     defaultLocale             : undefined,
                     gaiaApi                   : undefined,
                     drupalMultisiteIdentifier : undefined,
+                    multiSiteCode             : undefined,
                     baseHost                  : undefined,
                     logo                      : undefined,
-                    hasFlag                   : undefined,
+                    // hasFlag                   : undefined,
                     config                    : undefined,
                     name                      : undefined,
-                    hasNationalReportSix      : undefined,
+                    // hasNationalReportSix      : undefined,
                     redirect                  : undefined,
                     drupalInternalRevisionId : undefined,
-                    commentForum: undefined,
-                    taxonomyForums: undefined,
+                    // commentForum: undefined,
+                    // taxonomyForums: undefined,
                
                 }
 
@@ -40,13 +42,15 @@ function set(name, value){
 }
 
 async function initialize(nuxtApp, { identifier, defaultLocale, config, siteName }){
-    const { gaiaApi, drupalMultisiteIdentifier, baseHost, env }   = useRuntimeConfig().public;
+    const { gaiaApi, multiSiteCode, baseHost, env }   = useRuntimeConfig().public;
 
     this.set('baseHost', baseHost);
     this.set('gaiaApi', gaiaApi);
-    this.set('drupalMultisiteIdentifier', drupalMultisiteIdentifier);
+    this.set('drupalMultisiteIdentifier', multiSiteCode);
+    this.set('multiSiteCode', multiSiteCode);
     this.set('locale', nuxtApp.$i18n.locale);
     this.set('identifier', identifier);
+    this.set('siteCode', identifier);
     this.set('defaultLocale', defaultLocale);
 
     this.set('config', config);
@@ -106,7 +110,7 @@ function getHost(ignoreLocale = false){
     const { locale, identifier, baseHost, defaultLocale, redirect } = this;
 
     const pathLocale = ignoreLocale? '' : drupalizePathLocales(locale, defaultLocale);
-    const base       = redirect? `https://${redirect}` : `https://${encodeURIComponent(identifier)}${encodeURIComponent(baseHost)}`;
+    const base       = redirect    ? `https://${redirect}` : `https://${encodeURIComponent(identifier)}${encodeURIComponent(baseHost)}`;
 
     return `${base}${pathLocale}`;
 }
