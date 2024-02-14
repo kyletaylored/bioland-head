@@ -62,13 +62,13 @@ async function getInitialContext(locale){
 
         const identifier = getBiolandSiteIdentifier(useRequestURL().hostname) || 'seed';
 
-        const uri        = `/api/context/${identifier}/${unref(locale)}`
+        const uri        = `/api/context/${identifier}/${unref(locale)}`;
     
-        const { data, error } = await useFetch(uri)
+        const { data, error } = await useFetch(uri);
     
-        return data?.value
+        return data?.value;
     }catch(e){
-        consola.error('getInitialContext',e)
+        consola.error('getInitialContext',e);
     }
 }
 
@@ -114,7 +114,7 @@ function getHost(ignoreLocale = false){
 function params(){
     const { identifier, config, locale, defaultLocale, host, localizedHost, redirect } = this;
     const { country:c, countries:cs } = config;
-    const countries = cs?.length? Array.from(new Set([c, ...cs])): [c];
+    const countries = cs?.length? Array.from(new Set([c, ...cs])) : c? [c] : [];
 
     return { identifier, country:c, locale, defaultLocale, countries, redirect, host, localizedHost };
 }
