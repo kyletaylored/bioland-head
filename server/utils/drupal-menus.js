@@ -10,10 +10,10 @@ export async function useMenus(query){
                             .then((menusData) => menus[menuName] = menusData);
 
         menuPromises.push(menuPromise);
-
-        
     }
+
     menuPromises.push(getInstalledLanguages(query));
+
     const [main, footer, footerCredits, languages ] = await Promise.all(menuPromises);
     const [ cleanMenus ] = await Promise.all( [addMissingData(menus, query )])
 
@@ -51,9 +51,10 @@ function getInternalUrlsRecursive(menus,{internalUrlsArr, parent}={}){
     return internalUrls
 }
 const findFromRawMenus = (aMenu )=>({ link, title, alias  } = {})=>{
-
-    if(aMenu.href === link.uri && aMenu.title === title) return true
-    if(aMenu.href === link.alias && aMenu.title === title) return true
+    const { length } = aMenu?.hierarchy || [];
+    if(aMenu.href === link.uri && aMenu.title === title && length>1) return true
+    if(aMenu.href === link.alias && aMenu.title === title && length>1) return true
+    if(aMenu.title === title && length>1) return true
 
     return false
 }
@@ -72,17 +73,16 @@ async function addMissingData(menus, { identifier, pathPreFix, localizedHost }){
 
 function addMissingDataRecursive(menus, { identifier, pathPreFix, rawMenus, menuName, localizedHost  }){
 
-        for (const aMenu of menus) {
-            if(aMenu.children) aMenu.children=addMissingDataRecursive(aMenu.children, { identifier, pathPreFix, rawMenus, menuName, localizedHost  })
+        for (const index in menus) {
+            if(menus[index].children) menus[index].children=addMissingDataRecursive(menus[index].children, { identifier, pathPreFix, rawMenus, menuName, localizedHost  })
 
-            const rawMenu = rawMenus.find(findFromRawMenus(aMenu))
-            // if(rawMenu?.title==='Biodiversity Facts')
+            const rawMenu = rawMenus.find(findFromRawMenus(menus[index]))
 
             if(!rawMenu) continue;
-            if(rawMenu?.description) aMenu.description = rawMenu.description;
-            if(rawMenu?.link?.uri) aMenu.path = rawMenu.link.uri;
-            if(rawMenu?.id) aMenu.id = rawMenu.id;
-            if(rawMenu?.drupal_internal__id) aMenu.drupalInternalId = rawMenu.drupal_internal__id;
+            if(rawMenu?.description) menus[index].description = rawMenu.description;
+            if(rawMenu?.link?.uri) menus[index].path = rawMenu.link.uri;
+            if(rawMenu?.id) menus[index].id = rawMenu.id;
+            if(rawMenu?.drupal_internal__id) menus[index].drupalInternalId = rawMenu.drupal_internal__id;
         }
 
     return menus

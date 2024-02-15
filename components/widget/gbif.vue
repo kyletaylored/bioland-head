@@ -60,7 +60,7 @@
 
   function getCountry(){
     const { countries } = siteStore.params;
-    const country = countries[[Math.floor(Math.random() * countries.length)]]
+    const   country     = countries[[Math.floor(Math.random() * countries.length)]]
 
     return cCenter.find(({ identifier })=> identifier === country?.toUpperCase())
   }

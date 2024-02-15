@@ -3,6 +3,8 @@ import isString from 'lodash.isstring'
 import c from 'consola';
 import crypto from 'crypto';
 import { DateTime } from 'luxon';
+import clone from 'lodash.clonedeep';
+import isNill from 'lodash.isnil';
 
 export const consola = c;
 export const unLocales = ['en', 'ar', 'es', 'fr', 'ru', 'zh'];
@@ -13,6 +15,15 @@ export const bchMegaMenuSchemas = [ 'biosafetyLaw', 'biosafetyDecision', 'nation
 export function uniqueObjects(passedArray){
     return Array.from(new Set(passedArray.map(e => JSON.stringify(e)))).map(e => JSON.parse(e));
 }
+
+export function removeNullProps(obj){
+    for (const key in obj) {
+        if(isNill(obj[key])) delete obj[key];
+    }
+
+    return obj;
+}
+
 
 export const getKey =  (event) => {
     const { context } = parseCookies(event)
@@ -29,7 +40,7 @@ export const getKey =  (event) => {
 export const parseQuery = (event) => {
     const { country, identifier, locale, defaultLocale, countries: countriesArray } = getQuery(event);
     
-    const countries      = Array.isArray(countriesArray) && countriesArray?.length? countriesArray : country? [country]: [];
+    const countries      = (Array.isArray(countriesArray) && countriesArray?.length? countriesArray : country? [country]: []).filter(x=>x && x !== 'undefined');
 
     // const defaultLocale      =  !isPlainObject(defaultLocaleRaw)? JSON.parse(defaultLocaleRaw || {}).locale : defaultLocaleRaw.locale;
     const { baseHost, env }  = useRuntimeConfig().public;
@@ -39,7 +50,7 @@ export const parseQuery = (event) => {
     const localizedHost      = `${host}${pathPreFix}`;
     const indexLocal         = getIndexLocale(locale);
 
-    return { host, localizedHost, baseHost, country, countries, identifier, locale, defaultLocale, pathPreFix, indexLocal  }
+    return removeNullProps({ host, localizedHost, baseHost, country, countries, identifier, locale, defaultLocale, pathPreFix, indexLocal  })
 }
 
 export const getContext = (event) => {
@@ -56,7 +67,8 @@ export function parseContext (context) {
 
     const { country, localizedHost:lh, identifier, locale, defaultLocale, countries: countriesArray, redirect , path} = ctx;
     
-    const   countries       = Array.isArray(countriesArray) && countriesArray?.length? [country,...countriesArray] : country? [country] : [];
+    const   countries       = (Array.isArray(countriesArray) && countriesArray?.length? [country,...countriesArray] : country? [country] : []).filter(x=>x && x !== 'undefined');
+
     // const   defaultLocale   =  defaultLocale
     const { baseHost, env}  = useRuntimeConfig().public;
     const   pathPreFix      = getPathPrefix(locale, defaultLocale)
@@ -65,7 +77,7 @@ export function parseContext (context) {
     const   localizedHost   = lh? lh : `${host}${pathPreFix}`;
     const   indexLocale     = getIndexLocale(locale);
 
-    return { host, localizedHost, country,countries,  identifier, locale, defaultLocale, indexLocal:indexLocale, indexLocale, path }
+    return removeNullProps({ host, localizedHost, country,countries,  identifier, locale, defaultLocale, indexLocal:indexLocale, indexLocale, path })
 }
 
 export function sortArrayOfObjectsByProp(a,b, prop){
@@ -142,7 +154,7 @@ export async function getSiteDefinedName (ctx) {
 
 export async function getSiteConfig({ identifier }){
 
-    const { gaiaApi, multiSiteCode, env }  = useRuntimeConfig().public;
+    const { multiSiteCode, env } = useRuntimeConfig().public;
 
     const uri = `https://dmsm.cbddev.xyz/api/config/${env}/${multiSiteCode}/${identifier}`//`${gaiaApi}/v2023/drupal/multisite/${multiSiteCode}/configs/${identifier}`
 

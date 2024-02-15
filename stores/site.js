@@ -25,7 +25,7 @@ const initState = {
                     drupalInternalRevisionId : undefined,
                     // commentForum: undefined,
                     // taxonomyForums: undefined,
-               
+
                 }
 
 function state(){ return initState }
@@ -44,18 +44,18 @@ function set(name, value){
 async function initialize(nuxtApp, { identifier, defaultLocale, config, siteName }){
     const { gaiaApi, multiSiteCode, baseHost, env }   = useRuntimeConfig().public;
 
-    this.set('baseHost', baseHost);
-    this.set('gaiaApi', gaiaApi);
+    this.set('baseHost',                  baseHost);
+    this.set('gaiaApi',                   gaiaApi);
     this.set('drupalMultisiteIdentifier', multiSiteCode);
-    this.set('multiSiteCode', multiSiteCode);
-    this.set('locale', nuxtApp.$i18n.locale);
-    this.set('identifier', identifier);
-    this.set('siteCode', identifier);
-    this.set('defaultLocale', defaultLocale);
+    this.set('multiSiteCode',             multiSiteCode);
+    this.set('locale',                    nuxtApp.$i18n.locale);
+    this.set('identifier',                identifier);
+    this.set('siteCode',                  identifier);
+    this.set('defaultLocale',             defaultLocale);
 
     this.set('config', config);
-    this.set('logo', getLogoUri(config));
-    this.set('name', siteName);
+    this.set('logo',   getLogoUri(config));
+    this.set('name',   siteName);
     this.set('redirect', env === 'production'? config.redirect : '');
 }   
 
@@ -65,7 +65,6 @@ async function getInitialContext(locale){
     try{
 
         const identifier = getBiolandSiteIdentifier(useRequestURL().hostname) || 'seed';
-
         const uri        = `/api/context/${identifier}/${unref(locale)}`;
     
         const { data, error } = await useFetch(uri);
@@ -118,7 +117,8 @@ function getHost(ignoreLocale = false){
 function params(){
     const { identifier, config, locale, defaultLocale, host, localizedHost, redirect } = this;
     const { country:c, countries:cs } = config;
-    const countries = cs?.length? Array.from(new Set([c, ...cs])) : c? [c] : [];
+    const countries = (cs?.length? Array.from(new Set([c, ...cs])) : c? [c] : []).filter(x=>x && x !== 'undefined');
+
 
     return { identifier, country:c, locale, defaultLocale, countries, redirect, host, localizedHost };
 }
@@ -126,10 +126,10 @@ function params(){
 function countries(){
     const { config } = this;
 
-    const countries = config?.countries || [];
+    const countries = config?.countries || config?.runtime?.countries || [];
     const country   = config?.country? [config?.country] : []
 
-    return [  ...country , ...countries ];
+    return [  ...country , ...countries ].filter(x=>x && x !== 'undefined');
 }
 const drupalLocaleMap = new Map([['/zh','/zh-hans']]);
 

@@ -1,4 +1,4 @@
-export default cachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
     try{
         const identifier = getRouterParam(event, 'identifier')
         const locale     = getRouterParam(event, 'locale')
@@ -19,6 +19,4 @@ export default cachedEventHandler(async (event) => {
         }); 
     }
     
-},{
-    maxAge: 1
 })

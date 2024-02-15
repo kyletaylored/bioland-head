@@ -11,12 +11,12 @@ export default cachedEventHandler(async (event) => {
         }
 
         const [absch, bch, menus, nr, nrSix, nbsap, nfps, contentTypes,  forums  ] = await Promise.all([
-            $fetch('/api/menus/absch', { query, method:'get', headers }),
-            $fetch('/api/menus/bch', { query, method:'get', headers }),
+            $fetch('/api/menus/absch',        { query, method:'get', headers }),
+            $fetch('/api/menus/bch',          { query, method:'get', headers }),
             useMenus (query),
-            $fetch('/api/menus/nr', { query, method:'get', headers }),
-            $fetch('/api/menus/nr6', { query, method:'get', headers }),
-            $fetch('/api/menus/nbsap', { query, method:'get', headers }),
+            $fetch('/api/menus/nr',           { query, method:'get', headers }),
+            $fetch('/api/menus/nr6',          { query, method:'get', headers }),
+            $fetch('/api/menus/nbsap',        { query, method:'get', headers }),
             $fetch('/api/menus/focal-points', { query, method:'get', headers }),
 
             useContentTypeMenus(parseContext(context || query )),

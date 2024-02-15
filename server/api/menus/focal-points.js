@@ -8,7 +8,9 @@ export default cachedEventHandler(async (event) => {
         const context    = getContext(event);
         const query      = getQueryString(context);
 
+
         const response   = await $indexFetch(query);
+
         const countryMap = mapByCountry(response, context);
 
         const links = getLinks(countryMap);
@@ -26,13 +28,13 @@ export default cachedEventHandler(async (event) => {
     }
     
 },{
-    maxAge: 60*60*24,
-    varies:['Cookie']
+    maxAge: 1,
+    getKey
 })
 
 function mapByCountry({ docs }, ctx){
 
-    const countries = !ctx?.country? [ ...(ctx?.countries || [])] : [ ctx.country, ...(ctx?.countries || []) ];
+    const countries = ctx.countries;
 
     if(!docs || !countries?.length) return [];
 
@@ -42,7 +44,8 @@ function mapByCountry({ docs }, ctx){
         tMap[aCountryCode] = []
 
         for (const aDoc of docs){
-            if(!aDoc.hostGovernmentss?.includes(aCountryCode)) continue;
+  
+            if(!aDoc.hostGovernmentss?.includes(aCountryCode.toLowerCase())) continue;
 
             for (let index = 0; index < aDoc.types.length; index++) {
         

@@ -18,19 +18,26 @@ export const $indexFetch = async (queryString) => {
 export const getIndexLocale = (locale) => ['en', 'ar', 'es', 'fr', 'ru', 'zh'].includes(locale)? locale.toLocaleUpperCase() : 'EN';
 
 
+function cleanCountries({countries, country}){
+    if(!country && !countries?.length) return [];
+    if(!country && countries?.length) return countries;
 
-export const getIndexCountryQuery = ({ countries, country }={}) => [ country, ...(countries||[]) ].map((s)=>`hostGovernments_ss:${s}`).join('+OR+');
-
+    return Array.from(new Set([country, ...countries])) ;
+}
+export const getIndexCountryQuery = ({ countries, country }={}) => {
+  
+    return cleanCountries({ countries, country }).map((s)=>`${s.toLowerCase()}`).join('+');
+}
 export const getIndexQuery = (s, { countries, country }={}) => {
 
     const schema = Array.isArray(s)? s.map((aSchema)=>`schema_s:${aSchema}`).join('+OR+'): `schema_s:${s}`;
     const countryQueryString = getIndexCountryQuery({ countries, country });
 
 
-    return`q=NOT+version_s:*+AND+realm_ss:chm+AND+schema_s:*++AND+(${schema})+AND+(${countryQueryString})`;
+    return`q=(${schema})+AND+government_s:(${countryQueryString})`; //NOT+version_s:*+AND+realm_ss:chm+AND+schema_s:*++AND+
 }
 
-
+//https://api.cbd.int/api/v2013/index/select?q=realm_ss:chm AND (schema_s:focalPoint) AND government_s :(bn id kh la mm my ph sg th tl vn)&fl=type_EN_txt,hostGovernments_ss,type_ss&rows=500&sort=createdDate_dt+desc&start=0&wt=json
 export const getIndexFocalPointFields = (localePassed) => {
     const locale = getIndexLocale(localePassed);
 

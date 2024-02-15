@@ -4,8 +4,9 @@ export default cachedEventHandler(async (event) => {
         const query            = parseQuery   (event);
         const ctx              = getContext (event);
 
-        const { countries } = { ...ctx, ...query }
+        const { countries:c } = { ...ctx, ...query }
 
+        const countries = c.filter(x => x)
 
         const countryQueryString = Array.isArray(countries) && countries.length? countries.filter(x=>x).map((s)=>`country=${s.toUpperCase()}`).join('&') : '';
         const uri  = `https://api.gbif.org/v1/occurrence/search?${countryQueryString}&limit=0&facet=publishingOrg&facetLimit=1000`;
