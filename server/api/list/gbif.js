@@ -17,15 +17,12 @@ export default cachedEventHandler(async (event) => {
         return { ...data[0], ...data[1] }
     }
     catch(e){
-        consola.error(e);
-        throw createError({
-            statusCode: 500,
-            statusMessage: `Failed to get list/chm`,
-        }); 
+        //consola.error(e);
+        return { occurrences: 0, publishers: 0, datasets: 0 }
     }
     
 },{
-    maxAge: 1,
+    maxAge: 60*60*24,
     getKey
 })
 

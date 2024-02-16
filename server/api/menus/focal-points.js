@@ -44,28 +44,31 @@ function mapByCountry({ docs }, ctx){
         tMap[aCountryCode] = []
 
         for (const aDoc of docs){
-  
+            // console.log('==========',aDoc)
             if(!aDoc.hostGovernmentss?.includes(aCountryCode.toLowerCase())) continue;
 
             for (let index = 0; index < aDoc.types.length; index++) {
         
                 const tKey  = aDoc.types[index];
 
-                tMap[aCountryCode] = Array.from(new Set([ ...tMap[aCountryCode], tKey ]))
+                if( !tMap[aCountryCode] )  tMap[aCountryCode]  ={}
+                tMap[aCountryCode] [tKey] = aDoc.url
+                
+               // tMap[aCountryCode] = Array.from(new Set([ ...tMap[aCountryCode], tKey ]))
             }
         }
     }
 
     const countryTypeMap = {};
     for (const aCountryCode of countries) {
-        countryTypeMap[aCountryCode] = [];
+        countryTypeMap[aCountryCode] = {};//};
 
         for (const type of focalPointTypes) {
-            const aLink = tMap[aCountryCode].find((t)=> t === type)
+            const aLink = tMap[aCountryCode][type];
 
             if(!aLink) continue;
 
-            countryTypeMap[aCountryCode].push(aLink)
+            countryTypeMap[aCountryCode][type]=aLink
         }
         // if(countryTypeMap[aCountryCode].includes('ABS-FP'))
         //     countryTypeMap[aCountryCode].push('ABSCH-FP')
@@ -151,14 +154,17 @@ function getLinks(countryTypeMap){
 
         const onlyOneCountry = Object.keys(countryTypeMap).length === 1;
 
-        for (const type of countryTypeMap[aCountryCode] ) {
+        for (const [title, href] of Object.entries(countryTypeMap[aCountryCode]) ) {
             const countryPath = onlyOneCountry? '' : `/${aCountryCode}`;
-            const href        =  `/focal-points${countryPath}#${type}`;
-            const title       = type;
+            const url        =  `/focal-points${countryPath}#${title}`;
+
+            // const title       = type;
 
 
-            linksMap[aCountryCode].push({ href, title });
+            linksMap[aCountryCode].push({ href, title, url });
         }
+        const bbi = { href:`https://www.cbd.int/biobridge/platform/search?schema_s=bbiContact&hostGovernments_ss=${aCountryCode}`, title:'BBI Contacts' } 
+        linksMap[aCountryCode].push(bbi);
     }
 
     return linksMap;

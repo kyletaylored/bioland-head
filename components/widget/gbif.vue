@@ -21,7 +21,7 @@
 
         </LMap>
     </div>
-    <div class="d-flex justify-content-between text-primary mt-2 mb-3">
+    <div v-if="data" class="d-flex justify-content-between text-primary mt-2 mb-3">
         <div>
             <h5 class="fs-4 mb-1 ">{{data?.occurrences}}</h5>
             <NuxtLink class="text-decoration-underline" :to="occurrencesLink" external target="_blank">{{t('Occurrence')}}</NuxtLink>
@@ -95,7 +95,7 @@
 
     const   query  = {...siteStore.params };
     const { data } =  await useFetch(`/api/list/gbif`, {  method: 'GET', query });
-
+consola.info(data.value)
   </script>
   
   <style>

@@ -10,6 +10,7 @@ export const $indexFetch = async (queryString) => {
 
     const { response } = await $fetch(uri+queryString, { method, headers });
 
+    // console.log(response.docs)
     response.docs = response.docs.map(normalizeIndexKeys);
 
     return response
@@ -71,7 +72,8 @@ export const getIndexFocalPointTypesFields = (localePassed) => {
     const fields = [
                     `type_${locale}_txt`,
                     'hostGovernments_ss',
-                    `type_ss`
+                    `type_ss`,
+                    'url_ss',
                 ];
 
     return `fl=${fields.join(',')}`;
