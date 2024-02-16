@@ -16,7 +16,7 @@
                 <ClientOnly>
                     <Popper class="dark" :hover="true" :arrow="true" placement="bottom">
                         <GbfIcon :identifier="aTarget.identifier" size="xs"/>
-                        <template #content>
+                        <template #content class="w-50">
                         <div >
                             <h5>{{aTarget.title.en}}</h5>
                             <p >{{aTarget.description}}</p>
@@ -50,14 +50,19 @@
         </div>
         <div v-if="tags?.countries?.length" class="mb-2">
             <h5 >{{t("Countries")}}</h5>
-            <NuxtLink  v-for="(aCountry,i) in tags.countries" :key="i"  :to="`https://www.cbd.int/countries/?country=${aCountry.identifier}`" target="_blank" external>
-                <NuxtImg :alt="aCountry.name" :src="`https://www.cbd.int/images/flags/96/flag-${aCountry.identifier}-96.png`"  class="flag me-1"/>
-            </NuxtLink>
+            <section v-for="(aCountry,i) in tags.countries" :key="i" class="mb-1">
+                <NuxtLink   :to="`https://www.cbd.int/countries/?country=${aCountry.identifier}`" target="_blank" external>
+                    
+                    <span   class="badge text-wrap bg-primary me-1 w-100">
+                        <NuxtImg :alt="aCountry.name" :src="`https://www.cbd.int/images/flags/96/flag-${aCountry.identifier}-96.png`"  class="flag mb-1"/>
+                        <br>{{aCountry.name}}</span>
+                </NuxtLink>
+            </section>
         </div>
         <div v-if="tags?.subjects?.length" class="mb-2">
             <h5 >{{t("Thematic Areas")}}</h5>
             
-            <span  v-for="(subject,i) in tags.subjects" :key="i" class="badge bg-primary me-1">{{subject.name}}</span>
+            <span  v-for="(subject,i) in tags.subjects" :key="i" class="badge text-wrap bg-primary  w-100 mb-1">{{subject.name}}</span>
         </div>
     </div>
 </template>
@@ -85,6 +90,15 @@
 </script>
 
 <style lang="scss" scoped>
+  :deep(.popper) {
+    max-width: 35% !important;
+    h5{
+        color: #99f184;
+   
+    
+    }
+  }
+  
 .flag{
     max-width: 75px;
 }
@@ -109,5 +123,9 @@ h5{
 }
 .popper{
     max-width: 50% !important;
+}
+
+.badge.block-badge {
+    display: block;
 }
 </style>

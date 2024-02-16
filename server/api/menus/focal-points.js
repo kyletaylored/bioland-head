@@ -1,6 +1,6 @@
 import   clone           from 'lodash.clonedeep';
 
-const focalPointTypes = [ 'CBD-FP1',  'CPB-FP1', 'ABS-FP', 'CHM-FP', 'BCH-FP' ];
+const focalPointTypes = [ 'CBD-FP1', 'CHM-FP',   'ABS-FP', 'BCH-FP', 'CPB-FP1' ];
 const focalPointAll = [ 'CBD-FP1',  'CBD-FP2', 'CPB-FP1', 'ABS-FP', 'CHM-FP', 'BCH-FP', 'CPB-A17-FP', 'RM-FP', 'PA-FP', 'TKBD-FP', 'SBSTTA-FP', 'GTI-FP', 'GSPC-FP' ];
 
 export default cachedEventHandler(async (event) => {
@@ -67,8 +67,8 @@ function mapByCountry({ docs }, ctx){
 
             countryTypeMap[aCountryCode].push(aLink)
         }
-        if(countryTypeMap[aCountryCode].includes('ABS-FP'))
-            countryTypeMap[aCountryCode].push('ABSCH-FP')
+        // if(countryTypeMap[aCountryCode].includes('ABS-FP'))
+        //     countryTypeMap[aCountryCode].push('ABSCH-FP')
     }
     return countryTypeMap
 }

@@ -25,11 +25,15 @@
 
 
       const sizeMap = {
-        'xs': { svg: 25,  rect: 24, text: isGreaterThanNine.value ? 4: 13, textY: 25,  fontSize: 17,  },
+        'xs': { svg: 25,  rect: 24, text: isGreaterThanNine.value ? 4: 8, textY: 18,  fontSize: 15,  },
         'sm': { svg: 32,  rect: 32, text: isGreaterThanNine.value ? 8: 18, textY: 32,  fontSize: 20,  },
-        'lg': { svg: 64,  rect: 64, text: isGreaterThanNine.value ? 9: 33, textY: 65, fontSize: 50 }
+        'lg': { svg: 64,  rect: 64, text: isGreaterThanNine.value ? 6: 19, textY: 50, fontSize: 45 }
       }
-
+      // const sizeMap = {
+      //   'xs': { svg: 25,  rect: 24, text: isGreaterThanNine.value ? 4: 13, textY: 25,  fontSize: 17,  },
+      //   'sm': { svg: 32,  rect: 32, text: isGreaterThanNine.value ? 8: 18, textY: 32,  fontSize: 20,  },
+      //   'lg': { svg: 64,  rect: 64, text: isGreaterThanNine.value ? 9: 33, textY: 65, fontSize: 50 }
+      // }
       const sizes = computed(() => sizeMap[size.value]);
 
 
