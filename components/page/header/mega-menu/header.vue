@@ -32,8 +32,8 @@
     transition: 0.3s;
     right: -2em;
     bottom: 0.1rem;
-    width       : 1.5em;
-    height      : 1.5em;
+    width       : 1em;
+    height      : 1em;
 }
 .mm-main-nav-sub-heading,
 .main-nav-sub-heading{

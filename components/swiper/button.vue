@@ -19,8 +19,8 @@ import { useSwiper } from 'swiper/vue';
 .arrow{
     fill:var(--bs-blue);
     bottom: 0.1rem;
-    width       : 3.5em;
-    height      : 3.5em;
+    width       : 2.5em;
+    height      : 2.5em;
     cursor: pointer;
 }
 
