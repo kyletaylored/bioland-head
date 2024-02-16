@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon';
-
+import {kebabCase} from 'change-case';
 export default cachedEventHandler(async (event) => {
     try{
         const drupalInternalIds = [ 2, 3 ];
-        const rowsPerPage = 5;
+        const rowsPerPage = 20;
         const from        = DateTime.now().minus({months: 1}).toFormat('yyyy-MM-dd');
         const schemas     = [ 'news', 'notification', 'statement', 'meeting', 'pressRelease' ];
 
@@ -20,7 +20,7 @@ export default cachedEventHandler(async (event) => {
                     $fetch('/api/list/chm',  { query, method:'get', headers }).then((resp)=>resp.data.map(cleanIndexDataMap))
                 ]);
  //const resp = $fetch('/api/list/chm',  { query, method:'get', headers })//await $fetch('/api/list/content',      { query, method:'get', headers })
-        return sortData([ ...drupalContent.data, ...chmContent ]);
+        return sortData([ ...drupalContent.data, ...chmContent]); //
     }
     catch(e){
         consola.error(e);
@@ -31,7 +31,7 @@ export default cachedEventHandler(async (event) => {
     }
     
 },{
-    maxAge: 60,
+    maxAge: 1,
     getKey
 })
 
@@ -60,5 +60,27 @@ function cleanIndexDataMap(record){
     if(record.eventCountry)
         record.eventCountry = JSON.parse(record.eventCountry).en;
 
+    record.mediaImage =getRandomImage(record);
+
     return record
 }
+
+const imageCountMap = {
+    news: 8,
+    notification: 2,
+    statement: 1,
+    meeting: 8,
+    pressRelease: 2
+}
+
+function getRandomImage(record){
+
+    const max    = imageCountMap[record.schema] || 14
+    const type   = imageCountMap[record.schema]? kebabCase(record.schema): 'other';
+    const random = Math.floor(Math.random() * (max - 1 + 1) + 1)
+    const alt    = record.title || record.name || record.fieldTitle || record.fieldName;
+    const src    = `/images/types/${type}/${random}.jpg`;
+
+    return { alt, src, title:src }
+}
+//alt :  "International Biodiversity Day Celebration - 2023" filename :  "Picture6.jpg" height :  286 src :  "https://rjh.bl2.cbddev.xyz/sites/rjh/files/2023-11/Picture6.jpg" title :  "" width :  472

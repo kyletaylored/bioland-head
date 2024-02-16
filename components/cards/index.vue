@@ -5,7 +5,7 @@
         </div>
 
         <div class="card-body">
-            <h6 class="card-subtitle text-muted mb-2">{{type}}</h6>
+            <h6 class="card-subtitle text-muted mb-2">{{type}} {{record.schema? `- ${record.schema}`: ''}}</h6>
             <h5 class="card-title  mb-3">
                 <NuxtLink :to="goTo" style="color:black;"  :external="external" :target="external? '_blank': ''">{{record.title}}</NuxtLink>
             </h5>
@@ -77,7 +77,7 @@
                             }
         const imgUri = record?.value?.mediaImage?.src || '/images/no-image.png'                   
         const imgSrc = img(imgUri, imgOptions)
-
+// console.error(record?.value?.mediaImage)
         return {'background':`url('${imgSrc}') no-repeat center fixed`,  'object-fit': 'contain' , 'background-size': '100% auto', 'background-size': '150%'}
         })
 

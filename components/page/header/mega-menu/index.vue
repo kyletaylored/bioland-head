@@ -34,7 +34,7 @@ import { useElementBounding } from '@vueuse/core'
         const toggles   = ref([]);
         const menuStore = useMenusStore();
         const siteStore = useSiteStore();
-        consola.info('siteStore', siteStore)
+
         const { main: menus } = storeToRefs(menuStore);
         const router = useRouter()
 
