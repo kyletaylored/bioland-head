@@ -54,7 +54,12 @@ function mapByGov({ docs }, ctx){
         const nbsaps = tMap[aCountryCode].filter(({ symbol })=> symbol === 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721').sort((a,b)=> sort(a,b, 'createdDate'));
         const nrs =  tMap[aCountryCode].filter(({ symbol })=> symbol !== 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721').sort((a,b)=> sort(a,b, 'createdDate'));
 
-        tMap[aCountryCode] = [ ...nrs, ...nbsaps]
+        
+
+        const progress = { title: 'Progress Assessment', href:`https://chm.cbd.int/database?schema_s=nationalAssessment&hostGovernments_ss=${aCountryCode}`, target: '_blank',createdDate:"1913-05-02T18:36:31.137Z"}
+        const targets = { title: 'National Targets', href:`https://chm.cbd.int/database?schema_s=nationalTarget&hostGovernments_ss=${aCountryCode}`, target: '_blank',createdDate:"1914-05-02T18:36:31.137Z"}
+
+        tMap[aCountryCode] = [ ...nrs, ...nbsaps, targets, progress]
     }
 
     return tMap

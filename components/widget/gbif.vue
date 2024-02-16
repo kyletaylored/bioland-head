@@ -95,7 +95,7 @@
 
     const   query  = {...siteStore.params };
     const { data } =  await useFetch(`/api/list/gbif`, {  method: 'GET', query });
-consola.info(data.value)
+
   </script>
   
   <style>
