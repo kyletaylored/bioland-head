@@ -4,7 +4,10 @@
             <nav  class="navbar nav bg-dark w-100 pt-0">
                 <ul class="nav">
                     <li @click.stop="toggle(index)" v-for="(aMenu,index) in menus" :key="index" :class="{'bg-primary': aMenu.class?.includes('login')}" class="nav-item text-nowrap"  >
-                        <NuxtLink  :class="aMenu.class" class="nav-link" :to="aMenu.href" :title="aMenu.title" >
+                        <NuxtLink  v-if="!aMenu.class?.includes('login')" :class="aMenu.class" class="nav-link" :to="aMenu.href" :title="aMenu.title"  >
+                            {{aMenu.title}}
+                        </NuxtLink>
+                        <NuxtLink v-if="aMenu.class?.includes('login')" :class="aMenu.class" class="nav-link" :to="loginUrl" :title="aMenu.title" external target="_blank">
                             {{aMenu.title}}
                         </NuxtLink>
                         <span ref="spacers" :class="{ 'opacity-0': isLastSpacer(index) }" class="spacer"></span>
@@ -17,7 +20,7 @@
 </template>
 <script>
 import { useElementBounding } from '@vueuse/core'
-import { useMenusStore } from "~/stores/menus";
+// import { useMenusStore } from "~/stores/menus";
     export default {
         name: 'PageMegaMenu',
         methods: { isLastIndex , isLastSpacer, toggle, unToggle},
@@ -30,12 +33,14 @@ import { useMenusStore } from "~/stores/menus";
         const spacersY  = ref([]);
         const toggles   = ref([]);
         const menuStore = useMenusStore();
-        
+        const siteStore = useSiteStore();
+        consola.info('siteStore', siteStore)
         const { main: menus } = storeToRefs(menuStore);
         const router = useRouter()
 
         const eventBus   = useEventBus();
 
+        const loginUrl = computed(() => `https://${siteStore.config.runTime.host}/user/login`);
         router.beforeEach(() => {
           for (let index = 0; index < unref(toggles).length; index++)
               toggles.value[index] = false;
@@ -51,7 +56,7 @@ import { useMenusStore } from "~/stores/menus";
         //open menu from crumbs
         onMounted(() => eventBus.on('openMenu', (index) => toggles.value[index] = true) );
 
-        return { menus,  spacers, spacersY, toggles }
+        return { loginUrl, menus,  spacers, spacersY, toggles }
     }
 
     function toggle(index){
