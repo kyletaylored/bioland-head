@@ -86,7 +86,7 @@
     
         return typeText
     });
-
+    const imageGenStore = useImageGenStore();
     const imageSrc = computed(() => siteStore.host + record.value.fieldMediaImage?.uri?.url) //siteStore.host + fieldMediaImage?.value?.uri?.url
     const imageAlt = computed(() => record?.value?.fieldMediaImage?.meta?.alt)
     const goTo     = computed(() => {
@@ -102,7 +102,7 @@
     }
 
     const img = useImage();
-    const imgUri = record?.value?.mediaImage?.src || '/images/no-image.png';
+    const imgUri = record?.value?.mediaImage?.src || imageGenStore.getImage(record?.value).src//'/images/no-image.png';
     const hasImg = imgUri && imgUri !== '/images/no-image.png';  
 
     const backgroundStyles = computed(() => {
