@@ -13,27 +13,25 @@
                 <PageListTextSearch/>
             </div>
 
-            <ClientOnly>
+            
                 <div name="list" tag="div" class="col-12 col-md-9 data-body">
                     <PageListTabs  :types="types" :key="JSON.stringify(types)"/>
                     <PageListPager v-if="showTopPager" :count="results?.count" :key="`showTopPage${showTopPager}${results.count}`"/>
-                    <transition-group name="list">
-                        <PageListRow  :a-line="aLine" v-for="(aLine,index) in results?.data" :key="index" />
-                        <span :key="`showTopPage${showTopPager}${results?.count}-span`">&nbsp;</span>
-                    </transition-group>
+                    <ClientOnly>
+                        <transition-group name="list">
+                            <PageListRow  :a-line="aLine" v-for="(aLine,index) in results?.data" :key="index" />
+                        </transition-group>
+                    </ClientOnly>
+                    <!-- <PageListRow  :a-line="aLine" v-for="(aLine,index) in results?.data" :key="index" /> -->
+                    <PageListPager :count="results?.count"/>
                 </div>
-                <template #fallback>
-                    <div name="list" tag="div" class="col-12 col-md-9 data-body">
-                        <PageListTabs  :types="types" :key="JSON.stringify(types)"/>
-                        <PageListPager v-if="showTopPager" :count="results?.count" />
-                        <PageListRow  :a-line="aLine" v-for="(aLine,index) in results?.data" :key="index" />
-                    </div>
-                </template>
-            </ClientOnly>
 
+          
+
+            <!-- <span :key="`showTopPage${showTopPager}${results?.count}-span`">&nbsp;</span>
             <div class="col-12 col-md-9 offset-md-3 ">
                 <PageListPager :count="results?.count"/>
-            </div>
+            </div> -->
         </div>
     </div>
 

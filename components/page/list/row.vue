@@ -66,6 +66,7 @@
         // consola.info('aLine', aLine.value)
         const uri = aLine.value?.href//aLine.value?.path?.alias || aLine.value?.url;
 
+        if(!uri) return'';
         if(uri.startsWith('https')) return uri;
 
         return getRealmHost()+uri;
