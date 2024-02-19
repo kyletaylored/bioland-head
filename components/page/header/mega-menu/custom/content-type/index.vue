@@ -7,7 +7,7 @@
                     <div :class="{ 'd-flex justify-content-between':isCardView}">
                         <section v-for="(aChild,j) in menu.dataMap[slotProps.country]" :key="j">
 
-                            <PageHeaderMegaMenuLink v-if="!isHeader(aChild)"  :show-thumbs="menu.class?.includes('bl2-show-thumbs')" :show-cards="isCardView"  :menu="aChild" />
+                            <PageHeaderMegaMenuLink v-if="!isHeader(aChild)" :type="getContentType()" :show-thumbs="menu.class?.includes('bl2-show-thumbs')" :show-cards="isCardView"  :menu="aChild" />
                             <PageHeaderMegaMenuHeader v-if="isHeader(aChild)"  :menu="aChild" />
 
                             <PageHeaderMegaMenuLink v-if="hasFinalLink && isCardView"  :menu="hasFinalLink" />
@@ -45,7 +45,7 @@
     }
 
     const isCardView = computed(()=> {
-        const isXl = ['xl', 'xxl'].includes(viewport.breakpoint.value);
+        const isXl         = ['xl', 'xxl'].includes(viewport.breakpoint.value);
         const isShowThumbs = unref(passedMenu).class.includes('bl2-show-thumbs')
         
         if(unref(passedMenu).class.includes('bl2-2x') && isShowThumbs) return true;

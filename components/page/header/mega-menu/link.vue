@@ -22,7 +22,7 @@
     <section v-if="showCards && !isFinalLink">
         <NuxtLink  class="child-link" :class="menu.class"   :to="menu.href" :title="menu.title" :external="isExternal" :target="target">
             <div class="card" style="max-width: 160px;">
-                <NuxtImg :src="menu.thumb || '/images/no-image.png'" class="img-fluid" :alt="menu.title" width="160" height="100"/>
+                <NuxtImg :src="menu.thumb" class="img-fluid" :alt="menu.title" width="160" height="100"/>
                 <div class="card-body">
                     <p class="card-text">{{menu.title}}</p>
                     <p class="card-text"><small class="text-muted">{{dateFormat(menu)}}</small></p>
@@ -37,19 +37,28 @@
 
     export default {
         name: 'PageHeaderMegaMenuLink',
-        props:{ menu: Object, showThumbs: Boolean, showCards: Boolean, title: String },
+        props:{ menu: Object, showThumbs: Boolean, showCards: Boolean, title: String, type: String},
         methods: { dateFormat },
         setup
     }
 
     function setup(props) {
-        const { menu, showThumbs } = toRefs(props);
+        
+        const { menu, showThumbs, type } = toRefs(props);
         const { locale           } = useI18n();
 
         const   isFinalLink  = computed(()=> menu?.value?.class?.includes('main-nav-final-link') || menu?.value?.class?.includes('mm-main-nav-final-link'));
         const   isSpecial    = computed(()=> menu?.value?.class?.includes('special'));
         const   isExternal   = computed(()=> menu?.value?.href?.includes('http'));
         const   target       = computed(()=> menu?.value?.target? menu?.value?.target[0] : isExternal.value? '_blank':'_self');
+
+        if(type.value)
+            menu.value.schema= type;
+
+        const imageGenStore = useImageGenStore();
+
+        if(!menu?.value?.thumb || menu?.value?.thumb === '/images/no-image.png')
+            menu.value.thumb= imageGenStore.getImage(menu.value).src
 
         return {  locale, menu, isExternal, target, isSpecial, isFinalLink, showThumbs }
     }
@@ -59,6 +68,8 @@
 
         return DateTime.fromISO(date).setLocale(this.locale).toFormat('dd LLL yyyy');
     }
+
+
 </script>
 
 <style lang="scss" scoped>

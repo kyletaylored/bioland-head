@@ -35,6 +35,8 @@
 
     const { trunc  } = useText();
     const siteStore = useSiteStore();
+    const imageGenStore = useImageGenStore();
+
     const   props       = defineProps({ record: { type: Object } });
     const { record    } = toRefs(props);
 
@@ -65,21 +67,22 @@
         return DateTime.fromISO(date).setLocale(locale.value).toFormat('dd LLL yyyy');
     }
 
-    const img = useImage();
-
+    const img    = useImage();
+    const imgUri = record?.value?.mediaImage?.src || imageGenStore.getImage(record?.value)?.src;'/images/no-image.png'
+    
     const backgroundStyles = computed(() => {
         const imgOptions = { 
-                                height: 300,
-                                width: 500,
-                                fit: 'outside',
+                                height : 100,
+                                width  : 250,
+                                fit    : 'outside',
                                 quality: 60,
-                                format: ['webp', 'avif', 'jpeg', 'jpg', 'png','gif']
+                                format : ['webp', 'avif', 'jpeg', 'jpg', 'png','gif']
                             }
-        const imgUri = record?.value?.mediaImage?.src || '/images/no-image.png'                   
-        const imgSrc = img(imgUri, imgOptions)
-// console.error(record?.value?.mediaImage)
+        
+        const imgSrc = img(imgUri, imgOptions);
+
         return {'background':`url('${imgSrc}') no-repeat center fixed`,  'object-fit': 'contain' , 'background-size': '100% auto', 'background-size': '150%'}
-        })
+    })
 
 
 </script>

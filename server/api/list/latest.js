@@ -60,7 +60,7 @@ function cleanIndexDataMap(record){
     if(record.eventCountry)
         record.eventCountry = JSON.parse(record.eventCountry).en;
 
-    record.mediaImage =getRandomImage(record);
+    //record.mediaImage =getRandomImage(record);
 
     return record
 }
