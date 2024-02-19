@@ -45,15 +45,15 @@ function sortData(data){
 }
 
 function sortDates(a,b){
-    const aDate = DateTime.fromISO(a.fieldStartDate || a.startDate || a.fieldPublished || a.changed || a.updatedDate);
-    const bDate = DateTime.fromISO(b.fieldStartDate || b.startDate || b.fieldPublished || b.changed || b.updatedDate);
+    const aDate = DateTime.fromISO(a.changed || a.updatedDate || a.fieldPublished || a.fieldStartDate || a.startDate);
+    const bDate = DateTime.fromISO(b.changed || b.updatedDate || b.fieldPublished || b.fieldStartDate || b.startDate);
 
     if(aDate > bDate) return -1;
     if(bDate > aDate) return 1;
 
     return 0;
-
 }
+
 function cleanIndexDataMap(record){
     record.href =record.urls[0];
 

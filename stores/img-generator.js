@@ -57,7 +57,15 @@ const countMap = {
         `/images/types/other/11.jpg`,
         `/images/types/other/12.jpg`,
         `/images/types/other/13.jpg`,
-        `/images/types/other/14.jpg`
+        `/images/types/other/14.jpg`,
+        `/images/types/other/15.jpg`,
+        `/images/types/other/16.jpg`,
+        `/images/types/other/17.jpg`,
+        `/images/types/other/18.jpg`,
+        `/images/types/other/19.jpg`,
+        `/images/types/other/20.jpg`,
+        `/images/types/other/21.jpg`,
+        `/images/types/other/22.jpg`
     ]
 }
 
@@ -70,6 +78,7 @@ const   usedMap= {
     events      : [],
     other       : []
 }
+
 const initState = {  countMap:ref(countMap) }
 
 function state(){ return initState }
