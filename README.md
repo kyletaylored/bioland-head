@@ -80,30 +80,3 @@ mm-special
 mm-main-nav-sub-heading
 mm-show-thumbs
 
-
-*jsonapi/taxonomy_term/tags/*	staging.infra.cbd.int	HTTP and HTTPS	
-bioland-30-day
--
-attachments
-1	*jsonapi/configurable_language/configurable_language/*	staging.infra.cbd.int	HTTP and HTTPS	
-bioland-30-day
--
-attachments
-2	*jsonapi/media_type/media_type/*	staging.infra.cbd.int	HTTP and HTTPS	
-bioland-30-day
--
-attachments
-3	*router/translate-path	staging.infra.cbd.int	HTTP and HTTPS	
-bioland-30-day
--
-attachments
-4	*system/menu/*	staging.infra.cbd.int	HTTP and HTTPS	
-bioland-5-mins
--
-attachments
-5	*jsonapi/*	staging.infra.cbd.int	HTTP and HTTPS	
-Bioland-1-mins
--
-attachments
-6	/sites/*/files/202*/*	staging.infra.cbd.int	HTTP and HTTPS	
-bioland-30-day
