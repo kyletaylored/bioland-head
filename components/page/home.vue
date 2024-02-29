@@ -1,6 +1,11 @@
 <template>
 
     <div class="container">
+        <div v-if="body?.value" class="row">
+            <div class="col-12 my-2" >
+                <div  v-html="body?.value"></div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12 pe-0 me-0 mb-4" >
                 <SwiperNewsUpdates  :slides="slides" :arrows="true" :pagination="false" :leftArrow="false"/>
@@ -23,16 +28,16 @@
 </template>
 <script setup>
 // import { useMenusStore } from "~/stores/menus";
-// import { usePageStore } from "~/stores/page";
+import { usePageStore } from "~/stores/page";
 import { useSiteStore } from '~/stores/site';
 
 // const route = useRoute();
 // const localePath = useLocalePath();
-// const pageStore  = usePageStore();
+const pageStore  = usePageStore();
 // const menuStore = useMenusStore();
 const   siteStore                   = useSiteStore();
 
-
+const body = computed(()=>pageStore.body);
 const drupalInternalIds = [2,3]
 
 // const query = {drupalInternalIds, freeText}
