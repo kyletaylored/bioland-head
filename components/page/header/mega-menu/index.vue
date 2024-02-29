@@ -40,7 +40,7 @@ import { useElementBounding } from '@vueuse/core'
 
         const eventBus   = useEventBus();
 
-        const loginUrl = computed(() => `https://${siteStore.config.runTime.host}/user/login`);
+        const loginUrl = computed(() => `${siteStore.host}/user/login`);
         router.beforeEach(() => {
           for (let index = 0; index < unref(toggles).length; index++)
               toggles.value[index] = false;
