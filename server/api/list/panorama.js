@@ -29,7 +29,8 @@ export default cachedEventHandler(async (event) => {
     
 },{
     maxAge: 60*60*24,
-    getKey
+    getKey,
+    base:'db'
 })
 
 function mapPanoData({ id, url:href, title, summary, preview_image: mediaImage, classifications }){

@@ -18,8 +18,7 @@
 </template>
 <i18n src="@/i18n/dist/components/page/bread-crumbs.json"></i18n>
 <script setup>
-import { usePageStore } from "~/stores/page";
-import { useMenusStore } from "~/stores/menus";
+
 
 const { t  }    = useI18n();
 const   props   = defineProps({ count: { type: Number } });
@@ -29,7 +28,7 @@ const viewport   = useViewport();
 const route      = useRoute();
 const localePath = useLocalePath();
 const pageStore  = usePageStore();
-const contentTypeId = computed(()=> pageStore?.fieldTypePlacement?.drupal_internal__tid);
+const contentTypeId = computed(()=> pageStore?.page?.fieldTypePlacement?.drupal_internal__tid);
 const menusStore = useMenusStore();
 const inMenu     = ref(menusStore.isInMainMenu(route.path) || menusStore.isInMainMenu(parentPath()) || menusStore.isInMainMenuByContentTypeId(contentTypeId.value));
 const eventBus   = useEventBus();

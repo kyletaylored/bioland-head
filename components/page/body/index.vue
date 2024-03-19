@@ -86,8 +86,8 @@ const localePath = useLocalePath();
 
 
 
-const {isDocument, isImage, isImageOrVideo,isVideo, title, body, heroImage, typeName, image, tags, fieldAttachments, video, typeId, fieldUrl, document, documentUri} = storeToRefs( usePageStore());
-
+const {isDocument, isImage, isImageOrVideo,isVideo } = storeToRefs( usePageStore());
+const { title, body, heroImage, typeName, image, tags, fieldAttachments, video } = storeToRefs( usePageStore().page);
 // consola.error('downloadUrl', documentUri.value)
 // const isImageOrVideo = computed(()=> typeId.value === 16);
 // const isImage        = computed(()=> typeId.value === 16 && videos.value.length === 0);

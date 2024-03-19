@@ -28,8 +28,9 @@ export default cachedEventHandler(async (event) => {
     }
     
 },{
-    maxAge: 1,
-    getKey
+    maxAge: 60 * 60 * 24,
+    getKey,
+    base:'db'
 })
 
 function mapByCountry({ docs }, ctx){
@@ -44,7 +45,7 @@ function mapByCountry({ docs }, ctx){
         tMap[aCountryCode] = []
 
         for (const aDoc of docs){
-            // console.log('==========',aDoc)
+     
             if(!aDoc.hostGovernmentss?.includes(aCountryCode.toLowerCase())) continue;
 
             for (let index = 0; index < aDoc.types.length; index++) {

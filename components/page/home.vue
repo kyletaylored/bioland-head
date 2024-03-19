@@ -30,18 +30,18 @@
 // import { useMenusStore } from "~/stores/menus";
 import { usePageStore } from "~/stores/page";
 import { useSiteStore } from '~/stores/site';
-
+import clone from 'lodash.clonedeep';
 // const route = useRoute();
 // const localePath = useLocalePath();
 const pageStore  = usePageStore();
 // const menuStore = useMenusStore();
 const   siteStore                   = useSiteStore();
 
-const body = computed(()=>pageStore.body);
+const body = computed(()=>pageStore?.page?.body);
 const drupalInternalIds = [2,3]
 
 // const query = {drupalInternalIds, freeText}
-const query  = { drupalInternalIds, ...siteStore.params };
+const query  = clone({ drupalInternalIds, ...siteStore.params });
 
 const { data } = await useFetch(`/api/list/content`, {  method: 'GET', query });
 

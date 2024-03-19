@@ -5,10 +5,10 @@
 <script setup>
 
     import { useSiteStore } from '~/stores/site' ;
-
+    import clone from 'lodash.clonedeep';
     const { t  } = useI18n();
     const siteStore  = useSiteStore();
-    const query      = { ...siteStore.params };
+    const query      = clone({ ...siteStore.params });
     const localePath = useLocalePath();
 
 

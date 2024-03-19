@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20
 
 RUN apt update && \
     apt install yarn curl -y
@@ -22,4 +22,4 @@ ENV NUXT_PORT=8000
 
 
 
-CMD ["node", ".output/server/index.mjs"]
+CMD ["node", "--max-http-header-size=32768",".output/server/index.mjs"]

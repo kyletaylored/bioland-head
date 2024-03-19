@@ -1,6 +1,7 @@
 
-import   camelCaseKeys   from 'camelcase-keys';
-import { stripHtml } from "string-strip-html"; 
+
+import { stripHtml } from 'string-strip-html'; 
+import * as changeKeys from "change-case/keys";
 
 
 
@@ -11,9 +12,9 @@ export const useDrupalForumComments = async (ctx) => {
 
 async function getComments(ctx) {
 
-    const { host, identifier  } = ctx;
+    const { host, siteCode  } = ctx;
 
-    const $http = await useDrupalLogin(identifier);
+    const $http = await useDrupalLogin(siteCode);
 
     const params        = getParams(ctx);
     const uri           = `${host}/jsonapi/comment/comment_forum?jsonapi_include=1&include=uid,uid.user_picture${params}`;
@@ -32,7 +33,7 @@ function cleanComment(ctx){
         comment_body.summary = stripHtml(comment_body.value).result
         const dateString = getTimeStringFromIso(changed);
 
-        return camelCaseKeys({ id, drupal_internal__cid, status, subject, created, changed, thread, user,dateString,  comment_body }, {deep:true} );
+        return changeKeys.camelCase({ id, drupal_internal__cid, status, subject, created, changed, thread, user,dateString,  comment_body }, {deep:true} );
     }
 }
 function cleanUser(ctx){
@@ -41,7 +42,7 @@ function cleanUser(ctx){
 
         const img = cleanUserPicture(ctx)(user_picture);
 
-        return camelCaseKeys({ id, drupal_internal__uid, mail, status, display_name, created, changed, img }, {deep:true} );
+        return changeKeys.camelCase({ id, drupal_internal__uid, mail, status, display_name, created, changed, img }, {deep:true} );
     }
 }
 function cleanUserPicture(ctx){
@@ -52,7 +53,7 @@ function cleanUserPicture(ctx){
         
         const src = ctx.host+uri.url;
 
-        return camelCaseKeys({ id, drupal_internal__fid, filename, uri, meta, src }, {deep:true} );
+        return changeKeys.camelCase({ id, drupal_internal__fid, filename, uri, meta, src }, {deep:true} );
     }
 }
 function getParams(ctx){

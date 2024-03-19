@@ -47,7 +47,7 @@
 <script setup>
     import { useSiteStore  } from '~/stores/site';
     import { usePageStore  } from '~/stores/page';
-
+    import clone from 'lodash.clonedeep';
     
 
     const   r                           = useRoute();
@@ -67,16 +67,17 @@
     const freeText      = computed(() => r?.query?.freeText? r?.query?.freeText : '');
     const page          = computed(() => r?.query?.page? r?.query?.page : 1);
     const rowsPerPage   = computed(() => r?.query?.rowsPerPage? r?.query?.rowsPerPage : 10);
-    const query         = { ...r.query, ...siteStore.params, freeText, page, rowsPerPage };
+    const query         = clone ({ ...r.query, ...siteStore.params, freeText, page, rowsPerPage });
 
 
 
     const { data: results, status, refresh } = await useFetch(()=>getApiUri(), {  method: 'GET', query, onResponse });
 
     function onResponse({ response }){
-        if(pageStore.id !== response._data.id) return;
+        if(pageStore?.page?.id !== response._data.id) return;
 
-        pageStore.set('taxonomyForums', response._data.forum)
+        pageStore.page.taxonomyForums = response._data.forum;
+        // pageStore.set('taxonomyForums', response._data.forum)
 
     }
 
@@ -87,7 +88,7 @@
 
 
     function getApiUri(){
-        const topicId = pageStore.id;
+        const topicId = pageStore?.page?.id;
 
         return `/api/forums/${r.params.forumId}/${topicId}`;    
     }

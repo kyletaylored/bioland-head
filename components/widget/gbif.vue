@@ -49,14 +49,15 @@
   <script setup>
   import cCenter from '~/util/country-center.js'
   import { useSiteStore } from '~/stores/site' ;
+  import clone from 'lodash.clonedeep';
   const { t, locale } = useI18n();
 
   const siteStore = useSiteStore();
 
   const config = computed(getCountry)
-  const zoom = ref(config.value.zoomLevel)
+  const zoom = ref(config.value?.zoomLevel)
 
-  const url = computed(()=> `https://api.gbif.org/v2/map/occurrence/adhoc/{z}/{x}/{y}@2x.png?style=classic-noborder.poly&bin=hex&country=${config.value.identifier}&hasCoordinate=true&hasGeospatialIssue=false&advanced=false&srs=EPSG%3A3857`)
+  const url = computed(()=> `https://api.gbif.org/v2/map/occurrence/adhoc/{z}/{x}/{y}@2x.png?style=classic-noborder.poly&bin=hex&country=${config?.value?.identifier}&hasCoordinate=true&hasGeospatialIssue=false&advanced=false&srs=EPSG%3A3857`)
 
   function getCountry(){
     const { countries } = siteStore.params;
@@ -66,22 +67,22 @@
   }
 
     const occurrencesLink = computed(()=> {
-        const { countries } = siteStore.params;
-        const countryString = countries.filter(x=>x).map((s)=>s.toUpperCase()).join('&country=')
+        const { countries=[] } = siteStore.params;
+        const countryString = countries?.length? countries?.filter(x=>x).map((s)=>s.toUpperCase()).join('&country=') : '';
 
         return  `https://www.gbif.org/occurrence/search?country=${countryString}`
     });
 
     const datasetsLink = computed(()=> {
-        const { countries } = siteStore.params;
-        const countryString = countries.filter(x=>x).map((s)=>s.toUpperCase()).join('&publishing_country=')
+        const { countries=[] } = siteStore.params;
+        const countryString = countries?.length? countries?.filter(x=>x).map((s)=>s.toUpperCase()).join('&publishing_country='): '';
 
         return  `https://www.gbif.org/dataset/search?publishing_country=${countryString}`
     });
 
     const publishersLink = computed(()=> {
-        const { countries } = siteStore.params;
-        const countryString = countries.filter(x=>x).map((s)=>s.toUpperCase()).join('&country=')
+        const { countries=[] } = siteStore.params;
+        const countryString = countries?.length? countries?.filter(x=>x).map((s)=>s.toUpperCase()).join('&country='): '';
 
         return  `https://www.gbif.org/dataset/search?country=${countryString}`
     });
@@ -93,7 +94,7 @@
   { name: 'View all GBIF Data',  to:'https://www.gbif.org/search' },
 ]
 
-    const   query  = {...siteStore.params };
+    const   query  = clone({...siteStore.params });
     const { data } =  await useFetch(`/api/list/gbif`, {  method: 'GET', query });
 
   </script>

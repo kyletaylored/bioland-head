@@ -1,19 +1,20 @@
+
 export default cachedEventHandler(async (event) => {
     try{
-        const ctx =  getContext(event)
+        const context = getContext(event);
 
-        return  getDefaultLocale(ctx)
+        return useDrupalTopicMenus(parseContext(context))
     }
     catch(e){
         console.error(e);
         throw createError({
             statusCode: 500,
-            statusMessage: 'Failed to  query default locale',
+            statusMessage: 'Failed to  query the installed languages',
         }); 
     }
     
 },{
-    maxAge: 60 * 60 * 24,
+    maxAge: 60 * 5,
     getKey,
     base:'db'
 })

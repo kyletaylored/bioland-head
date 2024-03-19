@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { paramCase } from 'param-case';
+import  paramCase  from 'limax';
 import { stripHtml } from "string-strip-html"; 
 export const useDrupalTopicMenus = async (ctx) => {
 
@@ -108,7 +108,7 @@ function mapTopics(ctx){
 
 
 async function getLatestCommentsUsersFromForum(ctx, topicId){
-    const $http = await useDrupalLogin(ctx.identifier);
+    const $http = await useDrupalLogin(ctx.siteCode);
 
     const queryString = getCommentByTopicFilterQueryString(topicId);
     

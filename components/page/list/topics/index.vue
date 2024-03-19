@@ -43,14 +43,12 @@
 </template>
 <i18n src="@/i18n/dist/components/page/list/index.json"></i18n>
 <script setup>
-    import { useSiteStore  } from '~/stores/site';
-    import { useMenusStore } from '~/stores/menus';
-    import { usePageStore  } from '~/stores/page';
 
+    import clone from 'lodash.clonedeep';
     const { t  }                        = useI18n();
     const   r                           = useRoute();
     const   siteStore                   = useSiteStore();
-    const   pageStore                   = usePageStore ();
+
     const   eventBus                    = useEventBus();
     const   props                       = defineProps({ 
                                                         showTopPager: { type: Boolean, default: false },
@@ -65,7 +63,7 @@
     const freeText      = computed(() => r?.query?.freeText? r?.query?.freeText : '');
     const page          = computed(() => r?.query?.page? r?.query?.page : 1);
     const rowsPerPage   = computed(() => r?.query?.rowsPerPage? r?.query?.rowsPerPage : 10);
-    const query         = { ...r.query, ...siteStore.params, freeText, page, rowsPerPage };
+    const query         = clone({ ...r.query, ...siteStore.params, freeText, page, rowsPerPage });
 
 
 

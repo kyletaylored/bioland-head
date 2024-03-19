@@ -23,7 +23,8 @@ export default cachedEventHandler(async (event) => {
     
 },{
     maxAge: 60*60*24,
-    getKey
+    getKey,
+    base:'db'
 })
 
 function mapOccurrence({ count, facets }){

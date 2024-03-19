@@ -70,13 +70,12 @@
 <script setup>
     import   Popper         from 'vue3-popper'  ;
     import { DateTime     } from 'luxon'        ;
-    import { usePageStore } from '~/stores/page';
 
-    const route      = useRoute();
+
     const { t, locale } = useI18n();
+    const pageStore = usePageStore();
 
-    const pageStore = usePageStore()
-    const { path, created, fieldStartDate, fieldPublished, fieldEndDate, tags } = storeToRefs( usePageStore());
+    const { path, created, fieldStartDate, fieldPublished, fieldEndDate, tags } = storeToRefs( usePageStore().page); //path, created, fieldStartDate, fieldPublished, fieldEndDate, tags
 
     function getGbfUrl(identifier){
         const number = Number(identifier.replace('GBF-TARGET-', ''));

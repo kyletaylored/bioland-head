@@ -1,4 +1,4 @@
-import { paramCase } from "param-case";
+
 
 // export const useContentTypeCounts = async (ctx) => {
 //     await useDrupalLogin(ctx.identifier)
@@ -8,7 +8,7 @@ import { paramCase } from "param-case";
 // }
 
 export const useContentTypeMenus = async (ctx) => {
-    await useDrupalLogin(ctx.identifier)
+    await useDrupalLogin(ctx.siteCode)
     return  makeTypeMap(await getAllContentTypeMenus(ctx), ctx)
 }
 
