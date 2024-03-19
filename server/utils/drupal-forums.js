@@ -1,7 +1,8 @@
-// import { DateTime } from 'luxon';
-// import { paramCase } from 'param-case';
-import   camelCaseKeys   from 'camelcase-keys';
+
+
+
 import { stripHtml } from "string-strip-html"; 
+import * as changeKeys from 'change-case/keys';
 
 import {validate as validateUuid} from 'uuid';
 
@@ -86,7 +87,7 @@ async function mapForumMeta(ctx, forums){
 }
 
 function cleanForumData(forum){
-    const { id, drupalInternalTid, status, description, name, weight, path, fieldColor }   = camelCaseKeys (forum, { deep: true });
+    const { id, drupalInternalTid, status, description, name, weight, path, fieldColor }   = changeKeys.camelCase (forum, { deep: true });
 
     const summary = description?.value? stripHtml(description.value).result.substring(0, 400): '';
 

@@ -6,11 +6,11 @@
     <!-- <LazyCards :record="record" /> -->
     <div class="card " >
         <h6 class="card-subtitle text-muted mb-1">{{type}}</h6>
-
-        <div  v-if="hasImg" :style="backgroundStyles" class=" bg-light">
-            <NuxtLink :to="goTo"   :external="external" :target="external? '_blank': ''"><div style="width:100%;height:200px;"></div></NuxtLink> 
-        </div>
-
+        <ClientOnly>
+            <div  v-if="hasImg" :style="backgroundStyles" class=" bg-light">
+                <NuxtLink :to="goTo"   :external="external" :target="external? '_blank': ''"><div style="width:100%;height:200px;"></div></NuxtLink> 
+            </div>
+        </ClientOnly>
         <div class="card-body">
             
             <h5 class="card-title  mb-3">

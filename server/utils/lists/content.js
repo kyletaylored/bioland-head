@@ -1,5 +1,6 @@
-import   camelCaseKeys   from 'camelcase-keys';
+
 import { stripHtml } from "string-strip-html"; 
+import * as changeKeys from 'change-case/keys';
 
 export const useAllContent = async (ctx) => {
 
@@ -36,7 +37,7 @@ function mapData(ctx){
             const hasAlias   = path?.alias && path.langcode === ctx.locale;
             const href       = hasAlias? path?.alias : `${localePath}/node/${dnid}`;
 
-            results.data[key] = camelCaseKeys({dnid, href, type, mediaImage, title, tags, path, field_type_placement, field_start_date, changed, sticky, promote, id, summary: body?.summary, index }, {deep: true}  );
+            results.data[key] = changeKeys.camelCase({dnid, href, type, mediaImage, title, tags, path, field_type_placement, field_start_date, changed, sticky, promote, id, summary: body?.summary, index }, {deep: true}  );
 
             if(tags?.subjects)
                 for (const subject of tags.subjects) 

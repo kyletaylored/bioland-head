@@ -5,10 +5,10 @@
 <script setup>
 
     import { useSiteStore } from '~/stores/site' ;
-
+    import clone from 'lodash.clonedeep';
     const siteStore  = useSiteStore();
     const { t  } = useI18n();
-const query = { ...siteStore.params };
+const query = clone({ ...siteStore.params });
    // const { data: record  }= 
     const { data: record  } = await useFetch('/api/list/panorama', {  method: 'GET', onResponse, query });
 

@@ -1,4 +1,5 @@
-import   camelCaseKeys   from 'camelcase-keys';
+
+import * as changeKeys from 'change-case/keys';
 
 const localizationExceptionPaths = ['/forums/', '/forums', '/topics/'];
 
@@ -126,10 +127,10 @@ function mapData(ctx){
 
         for (const key in document) {
             if(Array.isArray(document[key]))
-                document[key] = document[key].map((item)=> camelCaseKeys(item))
+                document[key] = document[key].map((item)=> changeKeys.camelCase(item))
         }
 
-        return camelCaseKeys(document)
+        return changeKeys.camelCase(document)
     }
 }
 

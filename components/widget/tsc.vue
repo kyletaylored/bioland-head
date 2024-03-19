@@ -5,7 +5,7 @@
 <script setup>
 
     import { useSiteStore } from '~/stores/site' ;
-
+   
     const siteStore  = useSiteStore();
     const { t, locale } = useI18n();
     const unLocales  = ['en', 'fr', 'es', 'ru', 'ar', 'zh'];

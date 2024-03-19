@@ -156,7 +156,7 @@ function setup() {
     })
 
 
-    const hasHeroImage = computed(() => pageStore.hasHeroImage );
+    const hasHeroImage = computed(() => pageStore.page.hasHeroImage );
     
     return { localePath, t, logo , hasHeroImage , name, rowElWidth, cont, hasLargeName, navigateTo, queryText }
 }

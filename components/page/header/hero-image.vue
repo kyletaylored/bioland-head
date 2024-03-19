@@ -29,7 +29,7 @@ function setup() {
 
     const siteStore    = useSiteStore();
     const pageStore    = usePageStore();
-    const hasHeroImage = computed(() => pageStore.hasHeroImage);
+    const hasHeroImage = computed(() => pageStore?.page?.hasHeroImage);
     const viewport     = useViewport();
     const img          = useImage();
 

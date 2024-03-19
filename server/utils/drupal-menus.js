@@ -18,7 +18,8 @@ export async function useMenus(query){
     const [ cleanMenus ] = await Promise.all( [addMissingData(menus, query )])
 
 
-    await getThumbNails(cleanMenus, query)
+    await getThumbNails(cleanMenus, query);
+
     return { ...cleanMenus, languages };
 }
 
@@ -59,22 +60,22 @@ const findFromRawMenus = (aMenu )=>({ link, title, alias  } = {})=>{
     return false
 }
 
-async function addMissingData(menus, { identifier, pathPreFix, localizedHost }){
-    const rawMenus =  await getMenusFromApiPager ({ identifier, pathPreFix, localizedHost });
+async function addMissingData(menus, { siteCode, identifier, pathPreFix, localizedHost }){
+    const rawMenus =  await getMenusFromApiPager ({ siteCode,identifier, pathPreFix, localizedHost });
     
     for (const menuName in menus) {
         const rawMenuSet = rawMenus.filter((l) => l.menu_name === menuName)
 
-        addMissingDataRecursive(menus[menuName], { identifier, pathPreFix, localizedHost, rawMenus:rawMenuSet, menuName  })
+        addMissingDataRecursive(menus[menuName], { siteCode,identifier, pathPreFix, localizedHost, rawMenus:rawMenuSet, menuName  })
     }
 
     return menus
 }
 
-function addMissingDataRecursive(menus, { identifier, pathPreFix, rawMenus, menuName, localizedHost  }){
+function addMissingDataRecursive(menus, { siteCode,identifier, pathPreFix, rawMenus, menuName, localizedHost  }){
 
         for (const index in menus) {
-            if(menus[index].children) menus[index].children=addMissingDataRecursive(menus[index].children, { identifier, pathPreFix, rawMenus, menuName, localizedHost  })
+            if(menus[index].children) menus[index].children=addMissingDataRecursive(menus[index].children, { siteCode,identifier, pathPreFix, rawMenus, menuName, localizedHost  })
 
             const rawMenu = rawMenus.find(findFromRawMenus(menus[index]))
 
@@ -88,11 +89,11 @@ function addMissingDataRecursive(menus, { identifier, pathPreFix, rawMenus, menu
     return menus
 }
 
-async function getPathAliasFromApiPager ({ identifier, pathPreFix, localizedHost }, next){
+async function getPathAliasFromApiPager ({ siteCode, identifier, pathPreFix, localizedHost }, next){
     try {
 
 
-        const $http = await useDrupalLogin(identifier);
+        const $http = await useDrupalLogin(siteCode);
 
         const uri = next || `${localizedHost}/jsonapi/path_alias/path_alias`
 
@@ -100,7 +101,7 @@ async function getPathAliasFromApiPager ({ identifier, pathPreFix, localizedHost
 
         const { links, data } = body
 
-        if(nextUri(links)) return [ ...data, ...await getPathAliasFromApiPager({ identifier, pathPreFix, localizedHost }, nextUri(links)) ]
+        if(nextUri(links)) return [ ...data, ...await getPathAliasFromApiPager({ siteCode,  identifier, pathPreFix, localizedHost }, nextUri(links)) ]
 
         return data
     }
@@ -109,11 +110,11 @@ async function getPathAliasFromApiPager ({ identifier, pathPreFix, localizedHost
     }
 }
 
-export async function getMenusFromApiPager ({ identifier, pathPreFix, pathAlias, localizedHost }, next){
+export async function getMenusFromApiPager ({ siteCode,identifier, pathPreFix, pathAlias, localizedHost }, next){
     try {
-        const paths = pathAlias? pathAlias : await getPathAliasFromApiPager({ identifier, pathPreFix, localizedHost })
+        const paths = pathAlias? pathAlias : await getPathAliasFromApiPager({ siteCode,identifier, pathPreFix, localizedHost })
 
-        const $http = await useDrupalLogin(identifier)
+        const $http = await useDrupalLogin(siteCode)
 
         const uri = next || `${localizedHost}/jsonapi/menu_link_content/menu_link_content`
 
@@ -127,7 +128,7 @@ export async function getMenusFromApiPager ({ identifier, pathPreFix, pathAlias,
             if(path) aMenu.link.alias = path.alias
         }
 
-        if(nextUri(links)) return [ ...data, ...await getMenusFromApiPager({ identifier, pathPreFix, pathAlias:paths, localizedHost }, nextUri(links)) ]
+        if(nextUri(links)) return [ ...data, ...await getMenusFromApiPager({ siteCode,identifier, pathPreFix, pathAlias:paths, localizedHost }, nextUri(links)) ]
 
 
         return data

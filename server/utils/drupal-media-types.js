@@ -1,14 +1,14 @@
-import { paramCase } from "param-case";
+import  paramCase  from 'limax';
 
 export const useMediaTypeCounts = async (ctx) => {
-    await useDrupalLogin(ctx.identifier)
+    await useDrupalLogin(ctx.siteCode)
     const allCounts = await Promise.all([getAllMediaCounts(ctx)])
 
     return makeTypeMap(allCounts.flat())
 }
 
 export const useMediaTypeMenus = async (ctx) => {
-    await useDrupalLogin(ctx.identifier)
+    await useDrupalLogin(ctx.siteCode)
     return  makeTypeMap(await getAllMediaTypeMenus(ctx))
 }
 
@@ -81,10 +81,10 @@ async function getAllMediaTypeMenus(ctx){
 }
 
 
-async function getMediaTypes ({ identifier, localizedHost }) {
+async function getMediaTypes ({ siteCode, localizedHost }) {
     const uri   = `${localizedHost}/jsonapi/media_type/media_type?jsonapi_include=1`;
 
-    const $http = await useDrupalLogin(identifier)
+    const $http = await useDrupalLogin(siteCode)
 
 
     const { body }  = await $http.get(uri).withCredentials().accept('json')

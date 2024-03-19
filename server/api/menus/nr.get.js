@@ -18,7 +18,8 @@ export default cachedEventHandler(async (event) => {
     
 },{
     maxAge: 60 * 60 * 24,
-    varies:['Cookie']
+    getKey,
+    base:'db'
 })
 
 function getQueryString({ countries, country, locale }={}){

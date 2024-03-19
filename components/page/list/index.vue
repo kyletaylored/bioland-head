@@ -41,7 +41,8 @@
     import { useSiteStore  } from '~/stores/site';
     import { useMenusStore } from '~/stores/menus';
     import { usePageStore  } from '~/stores/page';
-
+    import clone from 'lodash.clonedeep';
+    
     const { t  }                        = useI18n();
     const   r                           = useRoute();
     const   siteStore                   = useSiteStore();
@@ -55,8 +56,8 @@
 
     const { showTopPager, title  }       = toRefs(props);
 
-    const isSecretariat  = computed(()=> pageStore.drupalInternalNid === 87 || pageStore.drupalInternalNid === 88 && r.query?.schemas?.length > 2);   
-    const isContent      = computed(()=> pageStore.drupalInternalNid === 25 || pageStore.drupalInternalNid === 88 && r.query?.schemas?.length === 2);  
+    const isSecretariat  = computed(()=> pageStore?.page?.drupalInternalNid === 87 || pageStore?.page?.drupalInternalNid === 88 && r.query?.schemas?.length > 2);   
+    const isContent      = computed(()=> pageStore?.page?.drupalInternalNid === 25 || pageStore?.page?.drupalInternalNid === 88 && r.query?.schemas?.length === 2);  
 
     const   type = computed(()=> isSecretariat.value? 'secretariat' : isContent.value? 'content' : undefined);
     
@@ -69,7 +70,7 @@
     const freeText      = computed(() => r?.query?.freeText? r?.query?.freeText : '');
     const page          = computed(() => r?.query?.page? r?.query?.page : 1);
     const rowsPerPage   = computed(() => r?.query?.rowsPerPage? r?.query?.rowsPerPage : 10);
-    const query         = { ...r.query, ...siteStore.params, freeText, page, rowsPerPage, schemas };
+    const query         = clone({ ...r.query, ...siteStore.params, freeText, page, rowsPerPage, schemas });
     const typeId        = computed(getContentTypeId);
     const contentTypeName = computed(getContentTypeName)
 

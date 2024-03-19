@@ -26,10 +26,10 @@
 
     const showNodes = [25,87,88]
     const pageStore = usePageStore();
-    const showTabs = computed(()=> showNodes.includes(pageStore.drupalInternalNid));
+    const showTabs = computed(()=> showNodes.includes(pageStore?.page?.drupalInternalNid));
 
     const siteContentTo = computed(()=> {
-        const pageNid = pageStore.drupalInternalNid;
+        const pageNid = pageStore?.page?.drupalInternalNid;
 
         if([25,87].includes(pageNid)) return localePath(`/search`)
         if(pageNid === 87) return localePath(`/search/secretariat`) 
@@ -39,7 +39,7 @@
     });
 
     const secretariatContentTo = computed(()=> {
-        const pageNid = pageStore.drupalInternalNid;
+        const pageNid = pageStore?.page?.drupalInternalNid;
 
         if([25,87].includes(pageNid)) return localePath(`/search/secretariat`)
 
@@ -49,7 +49,7 @@
     });
 
     const secretariatContentActive = computed(()=> {
-        const pageNid = pageStore.drupalInternalNid;
+        const pageNid = pageStore?.page?.drupalInternalNid;
 
         if([87].includes(pageNid)) return true
 
@@ -59,7 +59,7 @@
     });
 
     const siteContentActive = computed(()=> {
-        const pageNid = pageStore.drupalInternalNid;
+        const pageNid = pageStore?.page?.drupalInternalNid;
 
         if([25].includes(pageNid)) return true
 

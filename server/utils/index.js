@@ -38,7 +38,7 @@ export const getKey =  (event) => {
 }
 
 export const parseQuery = (event) => {
-    const { country, identifier, locale, defaultLocale, countries: countriesArray } = getQuery(event);
+    const { country, siteCode, identifier, locale, defaultLocale, countries: countriesArray } = getQuery(event);
     
     const countries      = (Array.isArray(countriesArray) && countriesArray?.length? countriesArray : country? [country]: []).filter(x=>x && x !== 'undefined');
 
@@ -46,11 +46,11 @@ export const parseQuery = (event) => {
     const { baseHost, env }  = useRuntimeConfig().public;
     const pathPreFix         = getPathPrefix(locale, defaultLocale)
     const hasRedirect        = env === 'production' && redirect;
-    const host               = hasRedirect? `https://${redirect}` : `https://${identifier}${baseHost}`;
+    const host               = hasRedirect? `https://${redirect}` : `https://${siteCode}.${baseHost}`;
     const localizedHost      = `${host}${pathPreFix}`;
     const indexLocal         = getIndexLocale(locale);
 
-    return removeNullProps({ host, localizedHost, baseHost, country, countries, identifier, locale, defaultLocale, pathPreFix, indexLocal  })
+    return removeNullProps({ host, localizedHost, baseHost, country, countries,siteCode, identifier, locale, defaultLocale, pathPreFix, indexLocal  })
 }
 
 export const getContext = (event) => {
@@ -65,7 +65,7 @@ export function parseContext (context) {
 
     const ctx = isString(context)? JSON.parse(context) : context;
 
-    const { country, localizedHost:lh, identifier, locale, defaultLocale, countries: countriesArray, redirect , path} = ctx;
+    const { country, localizedHost:lh,siteCode, identifier, locale, defaultLocale, countries: countriesArray, redirect , path} = ctx;
     
     const   countries       = (Array.isArray(countriesArray) && countriesArray?.length? [country,...countriesArray] : country? [country] : []).filter(x=>x && x !== 'undefined');
 
@@ -73,11 +73,11 @@ export function parseContext (context) {
     const { baseHost, env}  = useRuntimeConfig().public;
     const   pathPreFix      = getPathPrefix(locale, defaultLocale)
     const   hasRedirect     = env === 'production' && redirect;
-    const   host            = hasRedirect? `https://${redirect}` : `https://${identifier}${baseHost}`;
+    const   host            = hasRedirect? `https://${redirect}` : `https://${siteCode}.${baseHost}`;
     const   localizedHost   = lh? lh : `${host}${pathPreFix}`;
     const   indexLocale     = getIndexLocale(locale);
 
-    return removeNullProps({ host, localizedHost, country,countries,  identifier, locale, defaultLocale, indexLocal:indexLocale, indexLocale, path })
+    return removeNullProps({ host, localizedHost, country,countries, siteCode, identifier, locale, defaultLocale, indexLocal:indexLocale, indexLocale, path })
 }
 
 export function sortArrayOfObjectsByProp(a,b, prop){
@@ -152,11 +152,11 @@ export async function getSiteDefinedName (ctx) {
     return name === '_'? '' : name;
 }
 
-export async function getSiteConfig({ identifier }){
+export async function getSiteConfig({ identifier, siteCode }){
 
     const { multiSiteCode, env } = useRuntimeConfig().public;
 
-    const uri = `https://dmsm.cbddev.xyz/api/config/${env}/${multiSiteCode}/${identifier}`//`${gaiaApi}/v2023/drupal/multisite/${multiSiteCode}/configs/${identifier}`
+    const uri = `https://dmsm.cbddev.xyz/api/config/${env}/${multiSiteCode}/${siteCode}`//`${gaiaApi}/v2023/drupal/multisite/${multiSiteCode}/configs/${identifier}`
 
     return $fetch(uri);
 }
@@ -164,10 +164,10 @@ export async function getSiteConfig({ identifier }){
 
 function getHost(ctx, ignoreLocale = false){
     const { baseHost, env }  = useRuntimeConfig().public;
-    const { locale, identifier, defaultLocale, config } = ctx;
+    const { locale, identifier, siteCode,defaultLocale, config } = ctx;
     const   hasRedirect     = env === 'production' && config?.redirect;
     const pathLocale = ignoreLocale? '' : drupalizePathLocales(locale, defaultLocale);
-    const base       = hasRedirect? `https://${config.redirect}` : `https://${encodeURIComponent(identifier)}${encodeURIComponent(baseHost)}`;
+    const base       = hasRedirect? `https://${config.redirect}` : `https://${encodeURIComponent(siteCode)}.${encodeURIComponent(baseHost)}`;
 
     return `${base}${pathLocale}`;
 }

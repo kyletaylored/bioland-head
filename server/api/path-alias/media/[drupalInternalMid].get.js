@@ -20,5 +20,6 @@ const test = await pathAlias.getByMediaId(drupalIntarnalMid)
     
 },{
     maxAge: 60,
-    varies:['Cookie']
+    getKey,
+    base:'db'
 })

@@ -7,7 +7,8 @@
 </template>
 <script setup>
     import { useSiteStore } from "~/stores/site";
-
+    import clone from 'lodash.clonedeep';
+    
     const { drupalMultisiteIdentifier } = useRuntimeConfig().public;
     const route = useRoute()
 
@@ -19,7 +20,7 @@
 
     const params = { identifier, country, locale, defaultLocale, countries };
     const key = `${drupalMultisiteIdentifier}-${identifier}-${locale}`;
-    const query  = { ...route.query, ...siteStore.params };
+    const query  = clone({ ...route.query, ...siteStore.params });
 // const typeId = drupalTypes[type]?.drupalInternalId? '/'+drupalTypes[type]?.drupalInternalId : '';
 
     const { data } =  await useFetch(`/api/list/latest`, {  method: 'GET', query });

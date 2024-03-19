@@ -31,7 +31,7 @@ import { useSiteStore }  from '~/stores/site';
 import { Pagination  }   from 'swiper/modules';
 import { useWindowSize } from '@vueuse/core';
 import 'swiper/css';
-
+import clone from 'lodash.clonedeep';
 const localePath = useLocalePath();
 const { t } = useI18n();
 const props = defineProps({ 
@@ -73,7 +73,7 @@ const spaceBetween = computed(()=> {
 });
 
 const siteStore = useSiteStore();
-const query     = { ...siteStore.params };
+const query     = clone({ ...siteStore.params });
 
 const { data:slides } = await useFetch(`/api/list/latest`, {  method: 'GET', query });
 

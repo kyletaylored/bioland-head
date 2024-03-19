@@ -1,31 +1,41 @@
-import {  useSiteStore } from "~/stores/site";
-import {  usePageStore } from "~/stores/page";
-import {  useMenusStore } from "~/stores/menus";
+// import {  useSiteStore } from "~/stores/site";
+// import {  usePageStore } from "~/stores/page";
+// import {  useMenusStore } from "~/stores/menus";
 
 import vClickOutside from "click-outside-vue3";
+import clone from 'lodash.clonedeep';
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-    const route    = useRoute();
 
-    const pageStore = usePageStore(nuxtApp.$pinia);
 
     nuxtApp.vueApp.use(vClickOutside);
 
     const siteStore = useSiteStore(nuxtApp.$pinia);
     const menuStore = useMenusStore(nuxtApp.$pinia);
+    const context   = useCookie('context');
+    const route     = useRoute();
 
 
-    const { identifier, defaultLocale, config, siteName } = await siteStore.getInitialContext(nuxtApp.$i18n.locale);
+    const id         = getBiolandSiteIdentifier ();
+    const locale     = unref(nuxtApp.$i18n.locale);
+    const uri        = `/api/context/${id}/${locale}`;
+    const rtPublic   = useRuntimeConfig().public;
 
-    await siteStore.initialize(nuxtApp,{ identifier, defaultLocale, config, siteName });
+    const { data } = await useFetch(uri)
 
-    const context = useCookie('context');
 
-    context.value = {...siteStore.params, path:route.path};
+    siteStore.initialize({ ...rtPublic, ...data.value, locale}) ;
+    //context.value = { ...rtPublic, ...data.value, locale }; //path:route.path
+    context.value = { ...siteStore.params, locale }; 
+  
+//     consola.log('context.value',context.value )
+// consola.log('siteStore.params',siteStore.params )
 
-    const { data } = await useFetch(`/api/menus`, { params: {...siteStore.params, path:route.path}});
+  ensureContext(siteStore.params)// const { data:menuData } = await useFetch(`/api/menus`, { params: clone({...siteStore.params, path:route.path})});
+//  if()
+    const { data:menuData } = await useFetch(`/api/menus`, { params: clone({...siteStore.params, path:route.path})});
 
-    await menuStore.loadAllMenus(data.value);
+    await menuStore.loadAllMenus(menuData.value);
 
     nuxtApp.hook('i18n:localeSwitched', async ({oldLocale, newLocale}) => {
         const context       = useCookie('context');
@@ -35,7 +45,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
         context.value = siteStore.params;
 
-        menuStore.loadAllMenus((await useFetch(`/api/menus`,{ params: siteStore.params })).data.value)
+        menuStore.loadAllMenus((await useFetch(`/api/menus`,{ params: clone(siteStore.params) })).data.value)
     })
 
 
@@ -81,10 +91,18 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
         const key = `${drupalMultisiteIdentifier}-${identifier}-${locale}`;
 
-        return useFetch(`/api/page/${key}/${encodeURIComponent(path)}`, {  method: 'GET', params: { ...siteStore.params, path } }).then(({ data }) => data);
+        return useFetch(`/api/page/${key}/${encodeURIComponent(path)}`, {  method: 'GET', params: clone({ ...siteStore.params, path }) }).then(({ data }) => data);
     }
 
 
+    function getBiolandSiteIdentifier () {
+        const hostName = useRequestURL().hostname;
+
+        if(!hostName || hostName.split('.').length <= 1)
+            return  'demo';
+    console.log('===========plugins/site.getBiolandSiteIdentifier',hostName.split('.'))
+        return hostName.split('.')[0];
+    }
 
 });
 
@@ -99,4 +117,12 @@ function isLocaleChange({ name: to }, { name: from }){
 function getLocaleFromRouteName(name){
     const indexToSlice = name.lastIndexOf('_');
     return name.slice(indexToSlice + 1);
+}
+
+function ensureContext(ctx = {}){
+    const hasContext = ctx.siteCode && ctx.locale && ctx.host && (ctx.country || ctx.countries?.length)
+
+    if(!hasContext)
+            throw new Error('plugins/site: Context not derived');
+    
 }

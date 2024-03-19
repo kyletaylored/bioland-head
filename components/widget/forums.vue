@@ -31,11 +31,12 @@
 <i18n src="@/i18n/dist/components/widget/index.json"></i18n>
 <script setup>
     import { useSiteStore } from '~/stores/site' ;
+    import clone from 'lodash.clonedeep';
     const { t, locale } = useI18n();
     const localePath  = useLocalePath()
     const siteStore = useSiteStore();
 
-    const   query  = {...siteStore.params, rowsPerPage:5 };
+    const   query  = clone({...siteStore.params, rowsPerPage:5 });
     const { data } =  await useFetch(`/api/list/topics`, {  method: 'GET', query });
 </script>
 
